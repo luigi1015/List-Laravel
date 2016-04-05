@@ -29,7 +29,7 @@ In the application directory (in this case "list"), run the command "php artisan
 
 **You'll probably have to restart Apache after making changes to the config files.**
 
-You might have to add something like below to "/etc/apache2/sites-enabled/000-default.conf" (or you can configure the "public" folder is the document root for all of Apache)
+You might have to add something like below to "/etc/apache2/sites-enabled/000-default.conf" (or you can configure the "public" folder to be the document root for all of Apache)
 
 <VirtualHost *:80>
     ServerName list.example.com
