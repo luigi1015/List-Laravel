@@ -8,6 +8,8 @@ In the Laravel app directory ("list" in this case), run the command "composer in
 2) Make sure Apache has write access to the "storage" and "bootstrap/cache" directories.
 If you're installing on Ubuntu, you can probably just make sure the "www-data" user or group has write access.
 
+*** You probably also want to run a command like "sudo chmod -R g+w storage/" so that Apache has the correct access. While setting up and running migrations on my stage computer, I ran into errors about access problems with a log file under storage/ until I ran that command. ***
+
 
 
 3) Set up the ".env" file in the app directory.
