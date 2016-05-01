@@ -1,5 +1,11 @@
 When you download this app, you must do the following to finish the installation:
 
+***
+Useful Tip:
+I've found the command "composer dump-autoload" has gotten me out of a lot of trouble when I'm creating, deleting, and renaming classes.
+It seems to make Laravel reload all the classes so that it has a current list with all the current names.
+***
+
 1) Build the vendor directory
 In the Laravel app directory ("list" in this case), run the command "composer install".
 
