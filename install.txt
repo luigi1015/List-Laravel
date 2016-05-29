@@ -7,7 +7,7 @@ It seems to make Laravel reload all the classes so that it has a current list wi
 ***
 
 1) Build the vendor directory
-In the Laravel app directory ("list" in this case), run the command "composer install".
+In the Laravel app directory ("ListApp" in this case), run the command "composer install".
 
 
 
@@ -25,7 +25,7 @@ You can probably just copy and modify the automatically included example ".env.e
 
 
 4) Generate an App Key.
-In the application directory (in this case "list"), run the command "php artisan key:generate" to generate the random app key.
+In the application directory (in this case "ListApp"), run the command "php artisan key:generate" to generate the random app key.
 
 
 

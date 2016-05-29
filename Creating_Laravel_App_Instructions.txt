@@ -1,0 +1,15 @@
+Step 0: Install php, composer
+	*The steps to install PHP will change beased on your system, but it should be well documented. The easiest way is probably your operating system's package management application if it has one. If not, you should be able to find instructions at http://php.net/
+
+	*Composer should be similar to PHP. Go to https://getcomposer.org/ for documentation.
+		If you're using a Unix like OS, you can probably just download the composer-setup.php file you get from https://getcomposer.org/installer and run it in /usr/local/bin to generate a file called composer.phar (which you should be able to rename to just composer).
+
+Step 1: Create a basic generic app with the command 'composer create-project laravel/laravel foobar --prefer-dist', just replace the word foobar with the name you want for your app.
+
+Step 2: See the install.txt app for some stuff you might need to do on initial creation of the app and definitely need to do when you install it on other machines.
+
+Step 3: The app starts with the basic name 'App', which is used in PHP namespacing among other places. You probably want to change it early on, use the command 'php artisan app:name foobar', just change the word foobar to whatever name you want.
+
+Step 4: Now it's time to start programming. The first stop is the app/Http/routes.php file, which as it's name suggests holds all the routes (as in what happens when the user goes to yourapp.com/route1 or yourapp.com/route2). The controllers (this is MVC structure) are in the app/Http/Controllers folder. The views are in the resources/views/ folder and use the Blade templating engine. The models are in the app folder. Database migrations, database seeders, etc are in the database folder.
+	** FYI, there artisan commands to create models, controllers, seeders, migrations.
+	** To find out more about all this stuff, go to https://laravel.com/ or https://laravel.com/docs
