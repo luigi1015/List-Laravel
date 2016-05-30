@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>A Very Simple View</title>
-		<meta charset="UTF-8">
-	</head>
-	<body>
+@extends('layouts.masterTemplate')
+
+@section('title')
+	A Very Simple View
+@stop
+
+@section('content')
 		This is a very simple view. If you'd like, copy this to use for another view.
-	</body>
-</html>
+@stop

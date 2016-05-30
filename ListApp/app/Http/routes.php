@@ -12,5 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
+
+if( App::environment('development') || App::environment('local') )
+{
+	Route::get('/debug', 'ListAppController@getDebug');
+}

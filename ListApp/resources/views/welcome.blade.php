@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Welcome!</title>
-	</head>
-	<body>
+@extends('layouts.masterTemplate')
+
+@section('title')
+	Welcome!
+@stop
+
+@section('content')
 		Welcome to the List App!
-	</body>
-</html>
+@stop
