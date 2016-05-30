@@ -23,4 +23,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+	public function permissions()
+	{
+		return $this->belongsToMany('\App\Permission')->withTimestamps();
+	}
+
+	public function permissionuserweblists()
+	{
+		return $this->hasMany('\App\Permissionuserweblist')->withTimestamps();
+	}
 }
