@@ -1,0 +1,30 @@
+body
+{
+	background-color: #FFFAF0;
+}
+
+.flash-message
+{
+	width: 100%;
+	background-color: #1E90FF;
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	text-align: center;
+	font-weight: bold;
+	font-size: large;
+}
+
+.flash-error
+{
+	width: 100%;
+	background-color: #FF0000;
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	text-align: center;
+	font-weight: bold;
+	font-size: large;
+}
