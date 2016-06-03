@@ -15,6 +15,7 @@
 		<a href='/'>Home</a>
 		@if( Auth::check() )
 			You are logged in as {{ Auth::user()->name }}
+			<a href='/home'>User Home</a>
 			<a href='/logout'>Logout</a>
 		@else
 			<a href='/login'>Login</a>

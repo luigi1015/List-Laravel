@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::group(['middleware' => 'auth'], function ()
 {
 	Route::get('/home', 'ListAppController@getHome');
+	Route::get('/list/{id}', 'ListAppController@getList');
 });
 
 /*Show login*/

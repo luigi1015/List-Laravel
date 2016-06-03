@@ -99,7 +99,19 @@ class ListAppController extends Controller
 	 */
 	public function getHome()
 	{
-		return view('home');
+		$weblistIds = \DB::table('permission_user_weblist')->where('usersid', \Auth::user()->userid)->pluck('weblist_id');
+		/*$permissionuserWeblists = \App\Permissionuserweblist::where('usersid',\Auth::user()->userid);*/
+		/*return view('home')->with('lists',\App\Weblist::where('userid',\Auth::user()->userid) );*/
+		return view('home')->with('lists', \App\Weblist::whereIn('id', $weblistIds)->get());
+	}
+
+	/**
+	 * Responds to GET //list/{id}
+	 */
+	public function getList($id)
+	{
+		$listItemIds = \DB::table('listitem_weblist')->where('weblist_id', $id)->pluck('listItem_id');
+		return view('list')->with('list', \App\Weblist::where('id', $id)->first())->with('listItems', \App\Listitem::whereIn('id', $listItemIds)->get());
 	}
 
 	/**

@@ -6,4 +6,13 @@
 
 @section('content')
 		Welcome to your user home page.
+		<br>
+		Your user id is {{ Auth::user()->userid }}
+		<br>
+		Your Lists:
+		<br>
+		@foreach( $lists as $list )
+			<a href='/list/{{ $list->id }}'>{{ $list->title }}</a>
+			<br>
+		@endforeach
 @stop
