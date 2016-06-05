@@ -55,7 +55,7 @@ class ListAppController extends Controller
 			}
 			catch( Exception $e )
 			{
-				Session::flash( 'error','There was a problem establishing the database connection: ' . $e.getMessage() );
+				Session::flash( 'error', 'There was a problem establishing the database connection: ' . $e.getMessage() );
 				\Log::error('There was a problem establishing the database connection: ' . $e.getMessage() .'\n' . $e.getTraceAsString());
 				$connectionEstablished = 'No';
 				//addFlashError( 'There was a problem establishing the database connection: ' . $e.getMessage() );
@@ -100,10 +100,11 @@ class ListAppController extends Controller
 	 */
 	public function getHome()
 	{
-		$weblistIds = \DB::table('permission_user_weblist')->where('usersid', \Auth::user()->userid)->pluck('weblist_id');
+		/*$weblistIds = \DB::table('permission_user_weblist')->where('usersid', \Auth::user()->userid)->pluck('weblist_id');*/
 		/*$permissionuserWeblists = \App\Permissionuserweblist::where('usersid',\Auth::user()->userid);*/
 		/*return view('home')->with('lists',\App\Weblist::where('userid',\Auth::user()->userid) );*/
-		return view('home')->with('lists', \App\Weblist::whereIn('id', $weblistIds)->get());
+		/*return view('home')->with('lists', \App\Weblist::whereIn('id', $weblistIds)->get());*/
+		return view('home')->with('lists', ListController::getUsersWeblists());
 	}
 
 	/**
@@ -111,10 +112,25 @@ class ListAppController extends Controller
 	 */
 	public function getList($id)
 	{
+		/*
 		$listItemIds = \DB::table('listitem_weblist')->where('weblist_id', $id)->pluck('listItem_id');
 		$listItems = \App\Listitem::whereIn('id', $listItemIds)->get();
 		$selectedWeblist = \App\Weblist::where('id', $id)->first();
 		return view('list')->with('title', $selectedWeblist->title)->with('list', $selectedWeblist)->with('listItems', $listItems);
+		*/
+		$selectedWeblist = ListController::getWeblistById( $id );
+		\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems.' );
+		$selectedWeblist->listitems()->each( function( $item, $key )
+		{
+			\Log::info( 'getList($id): listitem: ' . $item->description );
+		});
+		/*
+		foreach($selectedWeblist->listitems()::all() as $listitem)
+		{
+			\Log::info( 'getList($id): listitem: ' . $listitem->description );
+		}
+		*/
+		return view('list')->with('list', $selectedWeblist);
 	}
 
 	/**
@@ -136,6 +152,7 @@ class ListAppController extends Controller
 		}
 		else
 		{
+			Session::flash( 'error', 'There was a problem adding the item.' );
 			\Log::info('In postAddItem(), Did not get the required info, listId and itemDescription (maybe more if Ive forgotten to update this message.');
 		}
 		return view('welcome');

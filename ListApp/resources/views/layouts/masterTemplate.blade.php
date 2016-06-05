@@ -12,7 +12,7 @@
 		@if( Session::has('error') )
 			<p class="flash-error">{{ Session::get('error') }}</p>
 		@endif
-		<a href='/'>Home</a>
+		<a href='/'>Homepage</a>
 		@if( Auth::check() )
 			You are logged in as {{ Auth::user()->name }}
 			<a href='/home'>User Home</a>

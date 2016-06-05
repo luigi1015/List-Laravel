@@ -9,7 +9,7 @@
 		<br>
 		List items:
 		<br>
-		@foreach( $listItems as $listItem )
+		@foreach( $list->listitems as $listItem )
 			{{ $listItem->description }}
 			<br>
 		@endforeach
