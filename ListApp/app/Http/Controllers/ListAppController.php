@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 use App\Http\Requests;
 
@@ -106,12 +107,38 @@ class ListAppController extends Controller
 	}
 
 	/**
-	 * Responds to GET //list/{id}
+	 * Responds to GET /list/{id}
 	 */
 	public function getList($id)
 	{
 		$listItemIds = \DB::table('listitem_weblist')->where('weblist_id', $id)->pluck('listItem_id');
-		return view('list')->with('list', \App\Weblist::where('id', $id)->first())->with('listItems', \App\Listitem::whereIn('id', $listItemIds)->get());
+		$listItems = \App\Listitem::whereIn('id', $listItemIds)->get();
+		$selectedWeblist = \App\Weblist::where('id', $id)->first();
+		return view('list')->with('title', $selectedWeblist->title)->with('list', $selectedWeblist)->with('listItems', $listItems);
+	}
+
+	/**
+	 * Responds to POST /additem
+	 */
+	public function postAddItem()
+	{
+		if( Input::has('listId') && Input::has('itemDescription') )
+		{
+			$selectedWeblist = \App\Weblist::where('id', Input::get('listId'))->first();
+			$newListItem = new \App\Listitem();
+			$newListItem->description = Input::get('itemDescription');
+			$newListItem->save();
+			$selectedWeblist->listitems()->attach($newListItem->id);
+			//$formInput = Input::all(); listitems()
+			\Log::info( 'postAddItem(): userid: ' . \Auth::user()->userid );
+			\Log::info( 'postAddItem(): listId: ' . Input::get('listId') );
+			\Log::info( 'postAddItem(): itemDescription: ' . Input::get('itemDescription') );
+		}
+		else
+		{
+			\Log::info('In postAddItem(), Did not get the required info, listId and itemDescription (maybe more if Ive forgotten to update this message.');
+		}
+		return view('welcome');
 	}
 
 	/**

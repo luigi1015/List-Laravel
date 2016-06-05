@@ -19,6 +19,7 @@ Route::group(['middleware' => 'auth'], function ()
 {
 	Route::get('/home', 'ListAppController@getHome');
 	Route::get('/list/{id}', 'ListAppController@getList');
+	Route::post('/additem', 'ListAppController@postAddItem');
 });
 
 /*Show login*/
