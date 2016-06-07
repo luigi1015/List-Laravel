@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->integer('active');/*1 = active, 2 = suspended*/
+            $table->integer('type');/*1 = regular*/
         });
     }
 

@@ -19,11 +19,11 @@ class CreateListitemsTagsTable extends Migration
 			
 			//Create the listItem id foreign key.
 			$table->integer('listItem_id')->unsigned();
-			$table->foreign('listItem_id')->references('id')->on('listitems');
+			$table->foreign('listItem_id')->references('id')->on('listitems')->onDelete('cascade');
 			
 			//Create the list id foreign key.
 			$table->integer('tag_id')->unsigned();
-			$table->foreign('tag_id')->references('id')->on('tags');
+			$table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
 		});
 	}
 

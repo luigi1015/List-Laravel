@@ -19,15 +19,15 @@ class CreatePermissionUserWeblistTable extends Migration
 			
 			//Create the permission id foreign key.
 			$table->integer('permission')->unsigned();
-			$table->foreign('permission')->references('id')->on('permissions');
+			$table->foreign('permission')->references('id')->on('permissions')->onDelete('cascade');
 			
 			//Create the user id foreign key.
 			$table->string('usersid');
-			$table->foreign('usersid')->references('userid')->on('users');
+			$table->foreign('usersid')->references('userid')->on('users')->onDelete('cascade');
 			
 			//Create the list id foreign key.
 			$table->integer('weblist_id')->unsigned();
-			$table->foreign('weblist_id')->references('id')->on('weblists');
+			$table->foreign('weblist_id')->references('id')->on('weblists')->onDelete('cascade');
 		});
 	}
 

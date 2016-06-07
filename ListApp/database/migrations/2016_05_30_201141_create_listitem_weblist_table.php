@@ -19,11 +19,11 @@ class CreateListitemWeblistTable extends Migration
 			
 			//Create the list id foreign key.
 			$table->integer('weblist_id')->unsigned();
-			$table->foreign('weblist_id')->references('id')->on('weblists');
+			$table->foreign('weblist_id')->references('id')->on('weblists')->onDelete('cascade');
 			
 			//Create the listItem id foreign key.
 			$table->integer('listItem_id')->unsigned();
-			$table->foreign('listItem_id')->references('id')->on('listitems');
+			$table->foreign('listItem_id')->references('id')->on('listitems')->onDelete('cascade');
 		});
 	}
 

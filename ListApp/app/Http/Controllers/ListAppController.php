@@ -120,10 +120,12 @@ class ListAppController extends Controller
 		*/
 		$selectedWeblist = ListController::getWeblistById( $id );
 		\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems.' );
+		/*
 		$selectedWeblist->listitems()->each( function( $item, $key )
 		{
 			\Log::info( 'getList($id): listitem: ' . $item->description );
 		});
+		*/
 		/*
 		foreach($selectedWeblist->listitems()::all() as $listitem)
 		{
@@ -140,22 +142,54 @@ class ListAppController extends Controller
 	{
 		if( Input::has('listId') && Input::has('itemDescription') )
 		{
+			$listId = Input::get('listId');
+			ListController::addItemToWeblist( $listId, Input::get('itemDescription') );
+			return \Redirect::route( 'list', array('id' => $listId) );
+			/*
 			$selectedWeblist = \App\Weblist::where('id', Input::get('listId'))->first();
 			$newListItem = new \App\Listitem();
 			$newListItem->description = Input::get('itemDescription');
 			$newListItem->save();
 			$selectedWeblist->listitems()->attach($newListItem->id);
+			*/
 			//$formInput = Input::all(); listitems()
+			/*
 			\Log::info( 'postAddItem(): userid: ' . \Auth::user()->userid );
 			\Log::info( 'postAddItem(): listId: ' . Input::get('listId') );
 			\Log::info( 'postAddItem(): itemDescription: ' . Input::get('itemDescription') );
+			*/
 		}
 		else
 		{
 			Session::flash( 'error', 'There was a problem adding the item.' );
-			\Log::info('In postAddItem(), Did not get the required info, listId and itemDescription (maybe more if Ive forgotten to update this message.');
+			\Log::error('In postAddItem(), Did not get the required info, listId and itemDescription (maybe more if Ive forgotten to update this message.');
+			return view('welcome');
 		}
-		return view('welcome');
+	}
+
+	/**
+	 * Responds to POST /deleteitem
+	 */
+	public function postDeleteItem()
+	{
+		if( Input::has('itemId') && Input::has('listId') )
+		{
+			$itemId = Input::get('itemId');
+			$listId = Input::get('listId');
+			$deleteWorked = ListController::deleteItemfromWeblist( $itemId );
+			if( $deleteWorked == FALSE )
+			{
+				Session::flash( 'error', 'Could not delete that item.' );
+				\Log::error('In postDeleteItem(), could not delete list item for itemId ' . $itemId . ' and listId ' . $listId . ' (maybe more if Ive forgotten to update this message.');
+			}
+			return \Redirect::route( 'list', array('id' => $listId) );
+		}
+		else
+		{
+			Session::flash( 'error', 'There was a problem deleting the item.' );
+			\Log::error('In postDeleteItem(), Did not get the required info, itemId and listId (maybe more if Ive forgotten to update this message.');
+			return view('welcome');
+		}
 	}
 
 	/**
