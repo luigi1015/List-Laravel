@@ -21,6 +21,7 @@ Route::group(['middleware' => 'auth'], function ()
 	Route::get('/list/{id}', 'ListAppController@getList')->name('list');
 	Route::post('/additem', 'ListAppController@postAddItem');
 	Route::post('/deleteitem', 'ListAppController@postDeleteItem');
+	Route::post('/deletetag', 'ListAppController@postDeleteTag');
 });
 
 /*Show login*/

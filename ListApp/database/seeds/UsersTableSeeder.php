@@ -52,7 +52,8 @@ class UsersTableSeeder extends Seeder
 			'username' => 'luigi1015',
 			'email' => 'j2013@crone.me',
 			'password' => \Hash::make('bowser1015'),
-			'active' => 1
+			'active' => 1,
+			'type' => 1
 		]);
 		/*\Log::info('Created user with UUID: ' . $uuid );*/
     }

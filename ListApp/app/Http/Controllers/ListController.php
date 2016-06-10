@@ -29,7 +29,7 @@ class ListController extends Controller
 	 */
 	public static function getWeblistById( $weblistId )
 	{
-		$selectedWeblist = \App\Weblist::with('listitems')->where('id', $weblistId)->first();
+		$selectedWeblist = \App\Weblist::with('listitems', 'listitems.tags')->where('id', $weblistId)->first();
 		return $selectedWeblist;
 	}
 
@@ -48,12 +48,29 @@ class ListController extends Controller
 	/**
 	 * Deletes an item from a weblist.
 	 */
-	public static function deleteItemfromWeblist( $itemId )
+	public static function deleteItemFromWeblist( $itemId )
 	{
 		$listItemToDelete = \App\Listitem::where('id', $itemId)->first();
 		if( $listItemToDelete )
 		{
 			$listItemToDelete->delete();
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Deletes a tag from an item.
+	 */
+	public static function deleteTagFromItem( $tagId )
+	{
+		$tagToDelete = \App\Tag::where('id', $tagId)->first();
+		if( $tagToDelete )
+		{
+			$tagToDelete->delete();
 			return TRUE;
 		}
 		else

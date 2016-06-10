@@ -176,7 +176,7 @@ class ListAppController extends Controller
 		{
 			$itemId = Input::get('itemId');
 			$listId = Input::get('listId');
-			$deleteWorked = ListController::deleteItemfromWeblist( $itemId );
+			$deleteWorked = ListController::deleteItemFromWeblist( $itemId );
 			if( $deleteWorked == FALSE )
 			{
 				Session::flash( 'error', 'Could not delete that item.' );
@@ -188,6 +188,32 @@ class ListAppController extends Controller
 		{
 			Session::flash( 'error', 'There was a problem deleting the item.' );
 			\Log::error('In postDeleteItem(), Did not get the required info, itemId and listId (maybe more if Ive forgotten to update this message.');
+			return view('welcome');
+		}
+	}
+
+	/**
+	 * Responds to POST /deletetag
+	 */
+	public function postDeleteTag()
+	{
+		if( Input::has('itemId') && Input::has('listId') && Input::has('tagId') )
+		{
+			$itemId = Input::get('itemId');
+			$listId = Input::get('listId');
+			$tagId = Input::get('tagId');
+			$deleteWorked = ListController::deleteTagFromItem( $tagId );
+			if( $deleteWorked == FALSE )
+			{
+				Session::flash( 'error', 'Could not delete that item.' );
+				\Log::error('In postDeleteTag(), could not delete list item for itemId ' . $itemId . ' and listId ' . $listId . ' and tagId ' . $tagId . ' (maybe more if Ive forgotten to update this message.');
+			}
+			return \Redirect::route( 'list', array('id' => $listId) );
+		}
+		else
+		{
+			Session::flash( 'error', 'There was a problem deleting the item.' );
+			\Log::error('In postDeleteTag(), Did not get the required info, itemId and listId and tagId (maybe more if Ive forgotten to update this message.');
 			return view('welcome');
 		}
 	}
