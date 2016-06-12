@@ -10,7 +10,7 @@
 		List items:
 		<br>
 		@foreach( $list->listitems as $listItem )
-			{{ $listItem->description }}
+			<input type="checkbox" name="checkbox-{{ $listItem->id }}" value="checkbox-{{ $listItem->id }}">{{ $listItem->description }}
 			@foreach( $listItem->tags as $tag )
 				<form method="post" action="/deletetag">
 					{!! csrf_field() !!}

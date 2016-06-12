@@ -41,7 +41,7 @@ class UsersTableSeeder extends Seeder
 		while( $usersWithSameID->count() > 0 );//If a user with the same id is found, create another one.
 		//while( !is_null($usersWithSameID) );//If a user with the same id is found, create another one.
 		*/
-		$uuid = ListAppController::getUUID();
+		$uuid = ListAppController::getUUID( 'users', 'userid' );
 
 		DB::table('users')->insert([
 			'created_at' => Carbon\Carbon::now()->toDateTimeString(),

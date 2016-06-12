@@ -16,7 +16,9 @@ class CreateListitemsTable extends Migration
 		{
 			$table->increments('id');
 			$table->timestamps();
+			$table->string('listitemid')->unique();
 			$table->string('description');
+			$table->boolean('checked')->default(false);
 		});
 	}
 

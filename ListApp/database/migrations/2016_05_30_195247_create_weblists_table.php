@@ -16,6 +16,7 @@ class CreateWeblistsTable extends Migration
 		{
 			$table->increments('id');
 			$table->timestamps();
+			$table->string('weblistid')->unique();
 			$table->string('title');
 		});
 	}

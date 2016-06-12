@@ -243,10 +243,18 @@ class ListAppController extends Controller
 	}
 
 	/**
-	 * Generates a UUID that's not in the users table.
+	 * Generates a UUID that's not in the $columnName column of the $tableName table.
+	 * 
+	 * $tableName - the name of the table to check for duplicates
+	 * $columnName - the name of the column within the table to check for duplicates
 	 */
-	public static function getUUID()
+	public static function getUUID( $tableName, $columnName )
 	{
+		if( empty($tableName) || empty($columnName) )
+		{
+			\Log::error('In getUUID( $tableName, $columnName ), either $tableName, "' . $tableName . '", is empty or $columnName, "' . $columnName . '", is empty.' );
+			abort(500);
+		}
 		$uuid = '';
 		$iterations = 1;
 		do
@@ -260,26 +268,36 @@ class ListAppController extends Controller
 
 			try
 			{
-					$uuid = Uuid::uuid4();
+				$uuid = ListAppController::getUUIDNoChecks();
 			}
 			catch( UnsatisfiedDependencyException $e )
 			{
 				\Log::error('There was a problem generating the UUID: ' . $e.getMessage() .'\n' . $e.getTraceAsString());
 				abort(500);
 			}
-			$usersWithSameID = \DB::table('users')->where('userid', $uuid);
-			/*
-			if( is_null($usersWithSameID) )
-			{
-				\Log::info('usersWithSameID is null.' . $uuid );
-			}
-			else
-			{
-				\Log::info('Count: ' . $usersWithSameID->count() );
-			}
-			*/
+			$usersWithSameID = \DB::table($tableName)->where($columnName, $uuid);
 		}
 		while( $usersWithSameID->count() > 0 );//If a user with the same id is found, create another one.
+
+		return $uuid;
+	}
+
+	/**
+	 * Generates a UUID.
+	 */
+	public static function getUUIDNoChecks()
+	{
+		$uuid = '';
+
+		try
+		{
+			$uuid = Uuid::uuid4();
+		}
+		catch( UnsatisfiedDependencyException $e )
+		{
+			\Log::error('In getUUIDNoChecks(), There was a problem generating the UUID: ' . $e.getMessage() .'\n' . $e.getTraceAsString());
+			throw $e;
+		}
 
 		return $uuid;
 	}
