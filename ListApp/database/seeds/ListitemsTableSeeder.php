@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Http\Controllers\ListAppController;
 
 class ListitemsTableSeeder extends Seeder
 {
@@ -18,7 +19,9 @@ class ListitemsTableSeeder extends Seeder
 		{
 			foreach( $itemDescriptions as $itemDescription )
 			{
+				$uuid = ListAppController::getUUID( 'listitems', 'listitemid' );
 				$listitem = new \App\Listitem();
+				$listitem->listitemid = $uuid;
 				$listitem->description = $listTitle . ' - ' . $itemDescription;
 				$listitem->save();
 			}

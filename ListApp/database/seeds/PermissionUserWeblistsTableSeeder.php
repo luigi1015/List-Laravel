@@ -19,18 +19,9 @@ class PermissionUserWeblistsTableSeeder extends Seeder
 
 		foreach( $weblists as $weblist )
 		{
-			//$user->permissions()->save( $weblist, $permission );
-			//$permission->weblist = $weblist;
-			//$permission->user = $user;
-			//$permission = \App\Permission::where('title','like','Owner')->first();
-			//$permission->weblists()->save( $weblist, array() );
-			//$permission->users()->save( $user );
-			//$user->permissions()->save( $permission, array('weblist_id' => $weblist->id) );
-			DB::insert('INSERT INTO permission_user_weblist (permission, usersid, weblist_id) VALUES (?, ?, ?)', [$permission->id, $user->userid, $weblist->id]);
+			DB::insert('INSERT INTO permission_user_weblist (permission, usersid, weblist_id) VALUES (?, ?, ?)', [$permission->id, $user->userid, $weblist->weblistid]);
 		}
 
-		//$weblists = DB::select( 'SELECT * FROM permission_user_weblist WHERE usersid = ? AND permission = ?', [$user->userid, $permission->id] );
-		//$weblists = DB::select( 'SELECT id FROM permission_user_weblist WHERE usersid = ? AND permission = ?', [$user->userid, $permission->id] );
 		//\Log::info($weblists);
 	}
 }

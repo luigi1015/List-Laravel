@@ -18,7 +18,8 @@ class ListitemTagsTableSeeder extends Seeder
 		foreach( $tagDescriptions as $tagDescription )
 		{
 			$tag = \App\Tag::where('description','like',$tagDescription)->first();
-			$listItem->tags()->save( $tag );
+			//$listItem->tags()->save( $tag );
+			DB::insert('INSERT INTO listitem_tag (created_at, updated_at, listItem_id, tag_id) VALUES (NOW(), NOW(), ?, ?)', [$listItem->listitemid, $tag->tagid]);
 		}
 	}
 }

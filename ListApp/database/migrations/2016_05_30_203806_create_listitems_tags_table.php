@@ -18,12 +18,12 @@ class CreateListitemsTagsTable extends Migration
 			$table->timestamps();
 			
 			//Create the listItem id foreign key.
-			$table->integer('listItem_id')->unsigned();
-			$table->foreign('listItem_id')->references('id')->on('listitems')->onDelete('cascade');
+			$table->string('listItem_id');
+			$table->foreign('listItem_id')->references('listitemid')->on('listitems')->onDelete('cascade');
 			
 			//Create the list id foreign key.
-			$table->integer('tag_id')->unsigned();
-			$table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+			$table->string('tag_id');
+			$table->foreign('tag_id')->references('tagid')->on('tags')->onDelete('cascade');
 		});
 	}
 

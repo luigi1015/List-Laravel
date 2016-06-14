@@ -16,16 +16,13 @@ class ListitemWeblistsTableSeeder extends Seeder
 
 		foreach( $listTitles as $listTitle )
 		{
-			//new \App\Weblist
-			//$list = DB::table('weblists')->where('title','like',$listTitle)->first();
-			$list = \App\Weblist::where('title','like',$listTitle)->first();
+			$weblist = \App\Weblist::where('title','like',$listTitle)->first();
 
 			foreach( $itemDescriptions as $itemDescription )
 			{
-				//$listItem = new \App\Listitem::where('description','like',$listTitle . ' - ' . $itemDescription)->first();
-				//$listItem = DB::table('listitems')->where('description','like',$listTitle . ' - ' . $itemDescription)->first();
 				$listItem = \App\Listitem::where('description','like',$listTitle . ' - ' . $itemDescription)->first();
-				$list->listitems()->save( $listItem );
+				//$list->listitems()->save( $listItem );
+				DB::insert('INSERT INTO listitem_weblist (created_at, updated_at, weblist_id, listitem_id) VALUES (NOW(), NOW(), ?, ?)', [$weblist->weblistid, $listItem->listitemid]);
 			}
 		}
 	}
