@@ -1,5 +1,5 @@
 Step 0: Install php, composer
-	*The steps to install PHP will change beased on your system, but it should be well documented. The easiest way is probably your operating system's package management application if it has one. If not, you should be able to find instructions at http://php.net/
+	*The steps to install PHP will change based on your system, but it should be well documented. The easiest way is probably your operating system's package management application if it has one. If not, you should be able to find instructions at http://php.net/
 
 	*Composer should be similar to PHP. Go to https://getcomposer.org/ for documentation.
 		If you're using a Unix like OS, you can probably just download the composer-setup.php file you get from https://getcomposer.org/installer and run it in /usr/local/bin to generate a file called composer.phar (which you should be able to rename to just composer).
