@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace ListApp\Http\Controllers\Auth;
 
-use App\User;
+use ListApp\User;
 use Validator;
-use App\Http\Controllers\Controller;
+use ListApp\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
-use App\Http\Controllers\ListAppController;
+use ListApp\Http\Controllers\ListAppController;
 
 class AuthController extends Controller
 {

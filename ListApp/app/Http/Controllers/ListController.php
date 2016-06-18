@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace ListApp\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
+use ListApp\Http\Requests;
 
 class ListController extends Controller
 {
@@ -14,14 +14,14 @@ class ListController extends Controller
 	public static function getUsersWeblists()
 	{
 		$weblistIds = \DB::table('permission_user_weblist')->where('usersid', \Auth::user()->userid)->pluck('weblist_id');
-		//return \App\Weblist::whereIn('id', $weblistIds)->get();
-		return \App\Weblist::whereIn('weblistid', $weblistIds)->get();
+		//return \ListApp\Weblist::whereIn('id', $weblistIds)->get();
+		return \ListApp\Weblist::whereIn('weblistid', $weblistIds)->get();
 	}
 	/*
 	public static function getWeblistsByUser( $userId )
 	{
 		$weblistIds = \DB::table('permission_user_weblist')->where('usersid', $userId)->pluck('weblist_id');
-		return view('home')->with('lists', \App\Weblist::whereIn('id', $weblistIds)->get());
+		return view('home')->with('lists', \ListApp\Weblist::whereIn('id', $weblistIds)->get());
 	}
 	*/
 
@@ -30,7 +30,7 @@ class ListController extends Controller
 	 */
 	public static function getWeblistById( $weblistId )
 	{
-		$selectedWeblist = \App\Weblist::with('listitems', 'listitems.tags')->where('id', $weblistId)->first();
+		$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('id', $weblistId)->first();
 		return $selectedWeblist;
 	}
 
@@ -39,8 +39,8 @@ class ListController extends Controller
 	 */
 	public static function addItemToWeblist( $weblistId, $itemDescription )
 	{
-		$selectedWeblist = \App\Weblist::where('id', $weblistId)->first();
-		$newListItem = new \App\Listitem();
+		$selectedWeblist = \ListApp\Weblist::where('id', $weblistId)->first();
+		$newListItem = new \ListApp\Listitem();
 		$newListItem->description = $itemDescription;
 		$newListItem->save();
 		$selectedWeblist->listitems()->attach($newListItem->id);
@@ -51,7 +51,7 @@ class ListController extends Controller
 	 */
 	public static function deleteItemFromWeblist( $itemId )
 	{
-		$listItemToDelete = \App\Listitem::where('id', $itemId)->first();
+		$listItemToDelete = \ListApp\Listitem::where('id', $itemId)->first();
 		if( $listItemToDelete )
 		{
 			$listItemToDelete->delete();
@@ -68,7 +68,7 @@ class ListController extends Controller
 	 */
 	public static function deleteTagFromItem( $tagId )
 	{
-		$tagToDelete = \App\Tag::where('id', $tagId)->first();
+		$tagToDelete = \ListApp\Tag::where('id', $tagId)->first();
 		if( $tagToDelete )
 		{
 			$tagToDelete->delete();

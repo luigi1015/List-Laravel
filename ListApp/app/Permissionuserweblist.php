@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace ListApp;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -8,16 +8,16 @@ class Permissionuserweblist extends Model
 {
 	public function weblists()
 	{
-		return $this->belongsTo('\App\Weblist')->withTimestamps();
+		return $this->belongsTo('\ListApp\Weblist')->withTimestamps();
 	}
 
 	public function permissions()
 	{
-		return $this->belongsTo('\App\Permission')->withTimestamps();
+		return $this->belongsTo('\ListApp\Permission')->withTimestamps();
 	}
 
 	public function users()
 	{
-		return $this->belongsTo('\App\User')->withTimestamps();
+		return $this->belongsTo('\ListApp\User')->withTimestamps();
 	}
 }

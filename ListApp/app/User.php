@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace ListApp;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -26,11 +26,11 @@ class User extends Authenticatable
 
 	public function permissions()
 	{
-		return $this->belongsToMany('\App\Permission')->withTimestamps();
+		return $this->belongsToMany('\ListApp\Permission')->withTimestamps();
 	}
 
 	public function permissionuserweblists()
 	{
-		return $this->hasMany('\App\Permissionuserweblist')->withTimestamps();
+		return $this->hasMany('\ListApp\Permissionuserweblist')->withTimestamps();
 	}
 }

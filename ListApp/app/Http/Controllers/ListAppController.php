@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace ListApp\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
-use App\Http\Requests;
+use ListApp\Http\Requests;
 
 /*use App;*/
 use Session;
@@ -101,9 +101,9 @@ class ListAppController extends Controller
 	public function getHome()
 	{
 		/*$weblistIds = \DB::table('permission_user_weblist')->where('usersid', \Auth::user()->userid)->pluck('weblist_id');*/
-		/*$permissionuserWeblists = \App\Permissionuserweblist::where('usersid',\Auth::user()->userid);*/
-		/*return view('home')->with('lists',\App\Weblist::where('userid',\Auth::user()->userid) );*/
-		/*return view('home')->with('lists', \App\Weblist::whereIn('id', $weblistIds)->get());*/
+		/*$permissionuserWeblists = \ListApp\Permissionuserweblist::where('usersid',\Auth::user()->userid);*/
+		/*return view('home')->with('lists',\ListApp\Weblist::where('userid',\Auth::user()->userid) );*/
+		/*return view('home')->with('lists', \ListApp\Weblist::whereIn('id', $weblistIds)->get());*/
 		return view('home')->with('lists', ListController::getUsersWeblists());
 	}
 
@@ -114,8 +114,8 @@ class ListAppController extends Controller
 	{
 		/*
 		$listItemIds = \DB::table('listitem_weblist')->where('weblist_id', $id)->pluck('listItem_id');
-		$listItems = \App\Listitem::whereIn('id', $listItemIds)->get();
-		$selectedWeblist = \App\Weblist::where('id', $id)->first();
+		$listItems = \ListApp\Listitem::whereIn('id', $listItemIds)->get();
+		$selectedWeblist = \ListApp\Weblist::where('id', $id)->first();
 		return view('list')->with('title', $selectedWeblist->title)->with('list', $selectedWeblist)->with('listItems', $listItems);
 		*/
 		$selectedWeblist = ListController::getWeblistById( $id );
@@ -146,8 +146,8 @@ class ListAppController extends Controller
 			ListController::addItemToWeblist( $listId, Input::get('itemDescription') );
 			return \Redirect::route( 'list', array('id' => $listId) );
 			/*
-			$selectedWeblist = \App\Weblist::where('id', Input::get('listId'))->first();
-			$newListItem = new \App\Listitem();
+			$selectedWeblist = \ListApp\Weblist::where('id', Input::get('listId'))->first();
+			$newListItem = new \ListApp\Listitem();
 			$newListItem->description = Input::get('itemDescription');
 			$newListItem->save();
 			$selectedWeblist->listitems()->attach($newListItem->id);
