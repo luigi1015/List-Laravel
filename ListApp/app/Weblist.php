@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Weblist extends Model
 {
+	//Change the primary key to weblistid instead of just id.
+	protected $primaryKey = 'weblistid';
+
 	public function listitems()
 	{
 		return $this->belongsToMany('\ListApp\Listitem')->withTimestamps();
