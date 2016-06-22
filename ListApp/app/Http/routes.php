@@ -45,4 +45,13 @@ Route::get('/logout/confirm', 'Auth\AuthController@confirmLogout');
 if( App::environment('development') || App::environment('local') )
 {
 	Route::get('/debug', 'ListAppController@getDebug');
+	Route::get('/debugbar', function() {
+		$data = Array('foo' => 'bar');
+		Debugbar::info($data);
+		Debugbar::error('Error!');
+		Debugbar::warning('Watch out…');
+		Debugbar::addMessage('Another message', 'mylabel');
+
+		return 'Practice';
+	});
 }

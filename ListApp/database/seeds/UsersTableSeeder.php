@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 
-use App\Http\Controllers\ListAppController;
+use ListApp\Http\Controllers\ListAppController;
 
 class UsersTableSeeder extends Seeder
 {

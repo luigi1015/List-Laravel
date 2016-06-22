@@ -119,7 +119,7 @@ class ListAppController extends Controller
 		return view('list')->with('title', $selectedWeblist->title)->with('list', $selectedWeblist)->with('listItems', $listItems);
 		*/
 		$selectedWeblist = ListController::getWeblistById( $id );
-		\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems.' );
+		\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
 		/*
 		$selectedWeblist->listitems()->each( function( $item, $key )
 		{

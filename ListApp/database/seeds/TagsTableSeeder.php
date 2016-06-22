@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Http\Controllers\ListAppController;
+use ListApp\Http\Controllers\ListAppController;
 
 class TagsTableSeeder extends Seeder
 {
@@ -17,7 +17,7 @@ class TagsTableSeeder extends Seeder
 		foreach( $tagDescriptions as $tagDescription )
 		{
 			$uuid = ListAppController::getUUID( 'tags', 'tagid' );
-			$tag = new \App\Tag();
+			$tag = new \ListApp\Tag();
 			$tag->tagid = $uuid;
 			$tag->description = $tagDescription;
 			$tag->save();

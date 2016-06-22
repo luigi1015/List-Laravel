@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Http\Controllers\ListAppController;
+use ListApp\Http\Controllers\ListAppController;
 
 class WeblistsTableSeeder extends Seeder
 {
@@ -17,7 +17,7 @@ class WeblistsTableSeeder extends Seeder
 		foreach( $listTitles as $listTitle )
 		{
 			$uuid = ListAppController::getUUID( 'weblists', 'weblistid' );
-			$list = new \App\Weblist();
+			$list = new \ListApp\Weblist();
 			$list->weblistid = $uuid;
 			$list->title = $listTitle;
 			$list->save();

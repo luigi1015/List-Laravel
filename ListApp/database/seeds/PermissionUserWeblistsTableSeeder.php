@@ -11,11 +11,11 @@ class PermissionUserWeblistsTableSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$user = \App\User::where('name','like','Jeff')->first();
+		$user = \ListApp\User::where('name','like','Jeff')->first();
 
-		$weblists = \App\Weblist::all();
+		$weblists = \ListApp\Weblist::all();
 
-		$permission = \App\Permission::where('title','like','Owner')->first();
+		$permission = \ListApp\Permission::where('title','like','Owner')->first();
 
 		foreach( $weblists as $weblist )
 		{

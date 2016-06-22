@@ -16,11 +16,11 @@ class ListitemWeblistsTableSeeder extends Seeder
 
 		foreach( $listTitles as $listTitle )
 		{
-			$weblist = \App\Weblist::where('title','like',$listTitle)->first();
+			$weblist = \ListApp\Weblist::where('title','like',$listTitle)->first();
 
 			foreach( $itemDescriptions as $itemDescription )
 			{
-				$listItem = \App\Listitem::where('description','like',$listTitle . ' - ' . $itemDescription)->first();
+				$listItem = \ListApp\Listitem::where('description','like',$listTitle . ' - ' . $itemDescription)->first();
 				//$list->listitems()->save( $listItem );
 				DB::insert('INSERT INTO listitem_weblist (created_at, updated_at, weblist_id, listitem_id) VALUES (NOW(), NOW(), ?, ?)', [$weblist->weblistid, $listItem->listitemid]);
 			}
