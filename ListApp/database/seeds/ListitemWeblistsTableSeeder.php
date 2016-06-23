@@ -17,6 +17,7 @@ class ListitemWeblistsTableSeeder extends Seeder
 		foreach( $listTitles as $listTitle )
 		{
 			$weblist = \ListApp\Weblist::where('title','like',$listTitle)->first();
+			\Log::info( 'Got ' . \ListApp\Weblist::where('title','like',$listTitle)->count() . ' weblists: ' . $weblist->weblistid );
 
 			foreach( $itemDescriptions as $itemDescription )
 			{

@@ -14,9 +14,8 @@ class CreateWeblistsTable extends Migration
 	{
 		Schema::create('weblists', function (Blueprint $table)
 		{
-			$table->increments('id');
+			$table->string('weblistid')->primary();
 			$table->timestamps();
-			$table->string('weblistid')->unique();
 			$table->string('title');
 		});
 	}

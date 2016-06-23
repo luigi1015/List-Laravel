@@ -27,6 +27,9 @@ class User extends Authenticatable
 	//Change the primary key to userid instead of just id.
 	protected $primaryKey = 'userid';
 
+	//Tell Laravel that the primary key isn't an incrementing integer, since otherwise it'll assume that.
+	public $incrementing = false;
+
 	public function permissions()
 	{
 		return $this->belongsToMany('\ListApp\Permission')->withTimestamps();

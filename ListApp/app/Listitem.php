@@ -9,6 +9,9 @@ class Listitem extends Model
 	//Change the primary key to listitemid instead of just id.
 	protected $primaryKey = 'listitemid';
 
+	//Tell Laravel that the primary key isn't an incrementing integer, since otherwise it'll assume that.
+	public $incrementing = false;
+
 	public function weblist()
 	{
 		return $this->belongsToMany('\ListApp\Weblist')->withTimestamps();

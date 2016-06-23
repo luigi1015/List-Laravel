@@ -14,9 +14,8 @@ class CreateListitemsTable extends Migration
 	{
 		Schema::create('listitems', function (Blueprint $table)
 		{
-			$table->increments('id');
+			$table->string('listitemid')->primary();
 			$table->timestamps();
-			$table->string('listitemid')->unique();
 			$table->string('description');
 			$table->boolean('checked')->default(false);
 		});

@@ -48,6 +48,8 @@ if( App::environment('development') || App::environment('local') )
 	Route::get('/debugbar', function() {
 		$data = Array('foo' => 'bar');
 		Debugbar::info($data);
+		$weblist = \ListApp\Weblist::where('title','like','List 01')->first();
+		Debugbar::info($weblist);
 		Debugbar::error('Error!');
 		Debugbar::warning('Watch out…');
 		Debugbar::addMessage('Another message', 'mylabel');
