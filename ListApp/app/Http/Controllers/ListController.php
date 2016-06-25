@@ -16,7 +16,7 @@ class ListController extends Controller
 		//$weblistIds = \DB::table('permission_user_weblist')->where('usersid', \Auth::user()->userid)->pluck('weblistid');
 		$weblistIds = \DB::table('permission_user_weblist')->join('permissions', 'permission_user_weblist.permissionid', '=', 'permissions.permissionid')->whereIn('title', ['Edit', 'Read', 'Owner'])->where('usersid', \Auth::user()->userid)->pluck('weblistid');
 		//return \ListApp\Weblist::whereIn('id', $weblistIds)->get();
-		return \ListApp\Weblist::whereIn('weblistid', $weblistIds)->get();
+		return \ListApp\Weblist::whereIn('weblistid', $weblistIds)->orderBy('title','asc')->get();
 	}
 	/*
 	public static function getWeblistsByUser( $userId )
@@ -29,9 +29,9 @@ class ListController extends Controller
 	/**
 	 * Returns a Weblist of the given id.
 	 */
-	public static function getWeblistById( $weblistId )
+	public static function getWeblistByNameid( $weblistId )
 	{
-		$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('id', $weblistId)->first();
+		$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('nameid', $weblistId)->first();
 		return $selectedWeblist;
 	}
 

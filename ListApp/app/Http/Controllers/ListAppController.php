@@ -118,8 +118,8 @@ class ListAppController extends Controller
 		$selectedWeblist = \ListApp\Weblist::where('id', $id)->first();
 		return view('list')->with('title', $selectedWeblist->title)->with('list', $selectedWeblist)->with('listItems', $listItems);
 		*/
-		$selectedWeblist = ListController::getWeblistById( $id );
-		\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
+		$selectedWeblist = ListController::getWeblistByNameid( $id );
+		//\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
 		/*
 		$selectedWeblist->listitems()->each( function( $item, $key )
 		{

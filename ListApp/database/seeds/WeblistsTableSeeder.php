@@ -20,6 +20,7 @@ class WeblistsTableSeeder extends Seeder
 			$list = new \ListApp\Weblist();
 			$list->weblistid = $uuid;
 			$list->title = $listTitle;
+			$list->nameid = str_replace(" ", "-", $listTitle);
 			$list->save();
 		}
 	}

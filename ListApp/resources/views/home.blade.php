@@ -12,7 +12,7 @@
 		Your Lists:
 		<br>
 		@foreach( $lists as $list )
-			<a href='/list/{{ $list->id }}'>{{ $list->title }}</a>
+			<a href='/list/{{ $list->nameid }}'>{{ $list->title }}</a>
 			<br>
 		@endforeach
 @stop
