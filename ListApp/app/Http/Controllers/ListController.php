@@ -40,11 +40,24 @@ class ListController extends Controller
 	 */
 	public static function addItemToWeblist( $weblistId, $itemDescription )
 	{
+		//$sc = new \Ramsey\Uuid\Codec\StringCodec;
+
+		$uuid = ListAppController::getUUID( 'listitems', 'listitemid' );
+
+		//$uuidString = $sc->encode($uuid);
+		$uuidString = vsprintf( '%08s-%04s-%04s-%02s%02s-%012s', $uuid->getFieldsHex() );
+		\Log::info( 'UUID: ' . $uuidString );
+
 		$selectedWeblist = \ListApp\Weblist::where('weblistid', $weblistId)->first();
+
 		$newListItem = new \ListApp\Listitem();
+		//$newListItem->listitemid = $uuid;
+		$newListItem->listitemid = $uuidString;
 		$newListItem->description = $itemDescription;
 		$newListItem->save();
-		$selectedWeblist->listitems()->attach($newListItem->id);
+		//$selectedWeblist->listitems()->attach($newListItem->listitemid);
+		//$selectedWeblist->listitems()->attach($uuid);
+		$selectedWeblist->listitems()->attach($uuidString);
 	}
 
 	/**

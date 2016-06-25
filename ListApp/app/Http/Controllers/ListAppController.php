@@ -112,6 +112,9 @@ class ListAppController extends Controller
 	 */
 	public function getList($id)
 	{
+		//TODO: Probably want to add some sort of check to make sure $id is a valid id. That way the app can handle the error properly.
+
+
 		/*
 		$listItemIds = \DB::table('listitem_weblist')->where('weblist_id', $id)->pluck('listItem_id');
 		$listItems = \ListApp\Listitem::whereIn('id', $listItemIds)->get();
@@ -144,9 +147,15 @@ class ListAppController extends Controller
 
 		if( Input::has('listId') && Input::has('itemDescription') )
 		{
+
 			$listId = Input::get('listId');
 			ListController::addItemToWeblist( $listId, Input::get('itemDescription') );
-			return \Redirect::route( 'list', array('id' => $listId) );
+
+			//ListController::addItemToWeblist( Input::get('listId'), Input::get('itemDescription') );
+			//return \Redirect::route( 'list', array('id' => $listId) );
+			//return \Redirect::route( 'list', array('list' => ListController::getWeblistByNameid($listId)) );
+			//return redirect()->route( 'list', [$listId] );
+			return redirect()->route( 'list', [\ListApp\Weblist::where('weblistid', $listId)->first()->nameid] );
 			/*
 			$selectedWeblist = \ListApp\Weblist::where('id', Input::get('listId'))->first();
 			$newListItem = new \ListApp\Listitem();
