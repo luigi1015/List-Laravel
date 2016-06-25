@@ -100,10 +100,6 @@ class ListAppController extends Controller
 	 */
 	public function getHome()
 	{
-		/*$weblistIds = \DB::table('permission_user_weblist')->where('usersid', \Auth::user()->userid)->pluck('weblist_id');*/
-		/*$permissionuserWeblists = \ListApp\Permissionuserweblist::where('usersid',\Auth::user()->userid);*/
-		/*return view('home')->with('lists',\ListApp\Weblist::where('userid',\Auth::user()->userid) );*/
-		/*return view('home')->with('lists', \ListApp\Weblist::whereIn('id', $weblistIds)->get());*/
 		return view('home')->with('lists', ListController::getUsersWeblists());
 	}
 
@@ -114,27 +110,8 @@ class ListAppController extends Controller
 	{
 		//TODO: Probably want to add some sort of check to make sure $id is a valid id. That way the app can handle the error properly.
 
-
-		/*
-		$listItemIds = \DB::table('listitem_weblist')->where('weblist_id', $id)->pluck('listItem_id');
-		$listItems = \ListApp\Listitem::whereIn('id', $listItemIds)->get();
-		$selectedWeblist = \ListApp\Weblist::where('id', $id)->first();
-		return view('list')->with('title', $selectedWeblist->title)->with('list', $selectedWeblist)->with('listItems', $listItems);
-		*/
 		$selectedWeblist = ListController::getWeblistByNameid( $id );
 		//\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
-		/*
-		$selectedWeblist->listitems()->each( function( $item, $key )
-		{
-			\Log::info( 'getList($id): listitem: ' . $item->description );
-		});
-		*/
-		/*
-		foreach($selectedWeblist->listitems()::all() as $listitem)
-		{
-			\Log::info( 'getList($id): listitem: ' . $listitem->description );
-		}
-		*/
 		return view('list')->with('list', $selectedWeblist);
 	}
 
@@ -151,19 +128,8 @@ class ListAppController extends Controller
 			$listId = Input::get('listId');
 			ListController::addItemToWeblist( $listId, Input::get('itemDescription') );
 
-			//ListController::addItemToWeblist( Input::get('listId'), Input::get('itemDescription') );
-			//return \Redirect::route( 'list', array('id' => $listId) );
-			//return \Redirect::route( 'list', array('list' => ListController::getWeblistByNameid($listId)) );
-			//return redirect()->route( 'list', [$listId] );
 			return redirect()->route( 'list', [\ListApp\Weblist::where('weblistid', $listId)->first()->nameid] );
-			/*
-			$selectedWeblist = \ListApp\Weblist::where('id', Input::get('listId'))->first();
-			$newListItem = new \ListApp\Listitem();
-			$newListItem->description = Input::get('itemDescription');
-			$newListItem->save();
-			$selectedWeblist->listitems()->attach($newListItem->id);
-			*/
-			//$formInput = Input::all(); listitems()
+
 			/*
 			\Log::info( 'postAddItem(): userid: ' . \Auth::user()->userid );
 			\Log::info( 'postAddItem(): listId: ' . Input::get('listId') );
