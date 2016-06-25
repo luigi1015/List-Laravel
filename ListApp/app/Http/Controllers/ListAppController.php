@@ -140,6 +140,8 @@ class ListAppController extends Controller
 	 */
 	public function postAddItem()
 	{
+		//TODO: Probably want to put in a Laravel Validator here like in postAddWeblist(Request $request)
+
 		if( Input::has('listId') && Input::has('itemDescription') )
 		{
 			$listId = Input::get('listId');
@@ -172,6 +174,8 @@ class ListAppController extends Controller
 	 */
 	public function postDeleteItem()
 	{
+		//TODO: Probably want to put in a Laravel Validator here like in postAddWeblist(Request $request)
+
 		if( Input::has('itemId') && Input::has('listId') )
 		{
 			$itemId = Input::get('itemId');
@@ -197,6 +201,8 @@ class ListAppController extends Controller
 	 */
 	public function postDeleteTag()
 	{
+		//TODO: Probably want to put in a Laravel Validator here like in postAddWeblist(Request $request)
+
 		if( Input::has('itemId') && Input::has('listId') && Input::has('tagId') )
 		{
 			$itemId = Input::get('itemId');
@@ -215,6 +221,29 @@ class ListAppController extends Controller
 			Session::flash( 'error', 'There was a problem deleting the item.' );
 			\Log::error('In postDeleteTag(), Did not get the required info, itemId and listId and tagId (maybe more if Ive forgotten to update this message.');
 			return view('welcome');
+		}
+	}
+
+	/**
+	 * Responds to POST /addweblist
+	 */
+	public function postAddWeblist(Request $request)
+	{
+		$this->validate($request, [
+			'weblistTitle' => 'required|min:3',
+			'weblistID' => 'required|min:3|alpha_dash',
+		]);
+
+		if( Input::has('weblistTitle') && Input::has('weblistID') )
+		{
+			ListController::addWeblist( Input::get('weblistTitle'), Input::get('weblistID'), $request->user()->userid );
+			return \Redirect::route( 'home' );
+		}
+		else
+		{
+			Session::flash( 'error', 'There was a problem adding the item.' );
+			\Log::error('In postAddWeblist(), Did not get the required info, weblistTitle and weblistID (maybe more if Ive forgotten to update this message.');
+			return \Redirect::route( 'home' );
 		}
 	}
 

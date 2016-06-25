@@ -40,7 +40,7 @@ class ListController extends Controller
 	 */
 	public static function addItemToWeblist( $weblistId, $itemDescription )
 	{
-		$selectedWeblist = \ListApp\Weblist::where('id', $weblistId)->first();
+		$selectedWeblist = \ListApp\Weblist::where('weblistid', $weblistId)->first();
 		$newListItem = new \ListApp\Listitem();
 		$newListItem->description = $itemDescription;
 		$newListItem->save();
@@ -52,7 +52,7 @@ class ListController extends Controller
 	 */
 	public static function deleteItemFromWeblist( $itemId )
 	{
-		$listItemToDelete = \ListApp\Listitem::where('id', $itemId)->first();
+		$listItemToDelete = \ListApp\Listitem::where('listitemid', $itemId)->first();
 		if( $listItemToDelete )
 		{
 			$listItemToDelete->delete();
@@ -69,7 +69,7 @@ class ListController extends Controller
 	 */
 	public static function deleteTagFromItem( $tagId )
 	{
-		$tagToDelete = \ListApp\Tag::where('id', $tagId)->first();
+		$tagToDelete = \ListApp\Tag::where('tagid', $tagId)->first();
 		if( $tagToDelete )
 		{
 			$tagToDelete->delete();
@@ -79,5 +79,24 @@ class ListController extends Controller
 		{
 			return FALSE;
 		}
+	}
+
+	/**
+	 * Creates a weblist. Generates a random UUID weblistid for the weblist.
+	 * 
+	 * Parameters: title, nameid, and userid
+	 */
+	public static function addWeblist( $newWeblistTitle, $newWeblistNameid, $userid )
+	{
+		$permission = \ListApp\Permission::where('title','like','Owner')->first();
+
+		$uuid = ListAppController::getUUID( 'weblists', 'weblistid' );
+		$newWeblist = new \ListApp\Weblist();
+		$newWeblist->weblistid = $uuid;
+		$newWeblist->title = $newWeblistTitle;
+		$newWeblist->nameid = $newWeblistNameid;
+		$newWeblist->save();
+
+		\DB::insert('INSERT INTO permission_user_weblist (permissionid, usersid, weblistid) VALUES (?, ?, ?)', [$permission->permissionid, $userid, $newWeblist->weblistid]);
 	}
 }

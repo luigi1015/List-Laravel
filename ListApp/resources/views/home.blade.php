@@ -15,4 +15,18 @@
 			<a href='/list/{{ $list->nameid }}'>{{ $list->title }}</a>
 			<br>
 		@endforeach
+
+		<fieldset>
+			<legend>Add List</legend>
+			<form method="post" action="/addweblist">
+				{!! csrf_field() !!}
+				<label for="weblistTitle">List Title:</label>
+				<input type="text" name="weblistTitle">
+				<br>
+				<label for="weblistID">List ID (must contain only letters, numbers, dashes, and/or underscores):</label>
+				<input type="text" name="weblistID">
+				<br>
+				<input type="submit">
+			</form>
+		</fieldset>
 @stop

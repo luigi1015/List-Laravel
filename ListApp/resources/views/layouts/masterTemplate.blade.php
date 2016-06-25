@@ -12,6 +12,13 @@
 		@if( Session::has('error') )
 			<p class="flash-error">{{ Session::get('error') }}</p>
 		@endif
+		@if( count($errors) > 0 )
+			<ul>
+				@foreach( $errors->all() as $error )
+					<li>{{ $error }}</li>
+				@endforeach
+			</ul>
+		@endif
 		<a href='/'>Homepage</a>
 		@if( Auth::check() )
 			You are logged in as {{ Auth::user()->name }}
