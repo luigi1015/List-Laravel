@@ -14,9 +14,9 @@
 			@foreach( $listItem->tags as $tag )
 				<form method="post" action="/deletetag">
 					{!! csrf_field() !!}
-					<input type="hidden" name="listId" value="{{ $list->id }}">
-					<input type="hidden" name="itemId" value="{{ $listItem->id }}">
-					<input type="hidden" name="tagId" value="{{ $tag->id }}">
+					<input type="hidden" name="listId" value="{{ $list->weblistid }}">
+					<input type="hidden" name="itemId" value="{{ $listItem->listitemid }}">
+					<input type="hidden" name="tagId" value="{{ $tag->tagid }}">
 					{{ $tag->description }}
 					<br>
 					<input type="submit" value="Delete Tag">
@@ -24,8 +24,8 @@
 			@endforeach
 			<form method="post" action="/deleteitem">
 				{!! csrf_field() !!}
-				<input type="hidden" name="listId" value="{{ $list->id }}">
-				<input type="hidden" name="itemId" value="{{ $listItem->id }}">
+				<input type="hidden" name="listId" value="{{ $list->weblistid }}">
+				<input type="hidden" name="itemId" value="{{ $listItem->listitemid }}">
 				<br>
 				<input type="submit" value="Delete Item">
 			</form>

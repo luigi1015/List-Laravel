@@ -195,13 +195,15 @@ class ListAppController extends Controller
 				Session::flash( 'error', 'Could not delete that item.' );
 				\Log::error('In postDeleteItem(), could not delete list item for itemId ' . $itemId . ' and listId ' . $listId . ' (maybe more if Ive forgotten to update this message.');
 			}
-			return \Redirect::route( 'list', array('id' => $listId) );
+			//return \Redirect::route( 'list', array('id' => $listId) );
+			return \Redirect::route( 'list', array('id' => \ListApp\Weblist::where('weblistid', $listId)->first()->nameid) );
 		}
 		else
 		{
 			Session::flash( 'error', 'There was a problem deleting the item.' );
 			\Log::error('In postDeleteItem(), Did not get the required info, itemId and listId (maybe more if Ive forgotten to update this message.');
-			return view('welcome');
+			//return view('welcome');
+			return \Redirect::route( 'list', array('id' => \ListApp\Weblist::where('weblistid', $listId)->first()->nameid) );
 		}
 	}
 
@@ -239,19 +241,19 @@ class ListAppController extends Controller
 	public function postAddWeblist(Request $request)
 	{
 		$this->validate($request, [
-			'weblistTitle' => 'required|min:3',
-			'weblistID' => 'required|min:3|alpha_dash',
+			'listTitle' => 'required|min:3',
+			'listId' => 'required|min:3|alpha_dash',
 		]);
 
-		if( Input::has('weblistTitle') && Input::has('weblistID') )
+		if( Input::has('listTitle') && Input::has('listId') )
 		{
-			ListController::addWeblist( Input::get('weblistTitle'), Input::get('weblistID'), $request->user()->userid );
+			ListController::addWeblist( Input::get('listTitle'), Input::get('listId'), $request->user()->userid );
 			return \Redirect::route( 'home' );
 		}
 		else
 		{
 			Session::flash( 'error', 'There was a problem adding the item.' );
-			\Log::error('In postAddWeblist(), Did not get the required info, weblistTitle and weblistID (maybe more if Ive forgotten to update this message.');
+			\Log::error('In postAddWeblist(), Did not get the required info, listTitle and listId (maybe more if Ive forgotten to update this message.');
 			return \Redirect::route( 'home' );
 		}
 	}

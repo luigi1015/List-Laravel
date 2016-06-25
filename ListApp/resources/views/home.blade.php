@@ -20,11 +20,11 @@
 			<legend>Add List</legend>
 			<form method="post" action="/addweblist">
 				{!! csrf_field() !!}
-				<label for="weblistTitle">List Title:</label>
-				<input type="text" name="weblistTitle">
+				<label for="listTitle">List Title:</label>
+				<input type="text" name="listTitle">
 				<br>
-				<label for="weblistID">List ID (must contain only letters, numbers, dashes, and/or underscores):</label>
-				<input type="text" name="weblistID">
+				<label for="listId">List ID (must contain only letters, numbers, dashes, and/or underscores):</label>
+				<input type="text" name="listId">
 				<br>
 				<input type="submit">
 			</form>
