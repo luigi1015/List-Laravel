@@ -18,18 +18,25 @@ If you're installing on Ubuntu, you can probably just make sure the "www-data" u
 
 
 
-3) Set up the ".env" file in the app directory.
+3) Make sure Apache has mod_rewrite activated. The command to do this on your server is probably something like "sudo a2enmod rewrite".
+See https://www.digitalocean.com/community/tutorials/how-to-set-up-mod_rewrite
+
+*** This problem happened to me on another project when all routes except for the root/home route (aka the one for / ) started giving "404 Not Found" errors. It took me a while to figure out but this was the problem." ***
+
+
+
+4) Set up the ".env" file in the app directory.
 You can probably just copy and modify the automatically included example ".env.example" file, which may be hidden.
 **Check you don't already have a ".env" file before you copy the example.**
 
 
 
-4) Generate an App Key.
+5) Generate an App Key.
 In the application directory (in this case "ListApp"), run the command "php artisan key:generate" to generate the random app key.
 
 
 
-5) Make sure the app is externally accessible through Apache.
+6) Make sure the app is externally accessible through Apache.
 
 **
 **Make sure Apache points to the "public" folder, not the app folder.**

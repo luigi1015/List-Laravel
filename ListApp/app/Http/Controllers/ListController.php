@@ -13,18 +13,9 @@ class ListController extends Controller
 	 */
 	public static function getUsersWeblists()
 	{
-		//$weblistIds = \DB::table('permission_user_weblist')->where('usersid', \Auth::user()->userid)->pluck('weblistid');
 		$weblistIds = \DB::table('permission_user_weblist')->join('permissions', 'permission_user_weblist.permissionid', '=', 'permissions.permissionid')->whereIn('title', ['Edit', 'Read', 'Owner'])->where('usersid', \Auth::user()->userid)->pluck('weblistid');
-		//return \ListApp\Weblist::whereIn('id', $weblistIds)->get();
 		return \ListApp\Weblist::whereIn('weblistid', $weblistIds)->orderBy('title','asc')->get();
 	}
-	/*
-	public static function getWeblistsByUser( $userId )
-	{
-		$weblistIds = \DB::table('permission_user_weblist')->where('usersid', $userId)->pluck('weblist_id');
-		return view('home')->with('lists', \ListApp\Weblist::whereIn('id', $weblistIds)->get());
-	}
-	*/
 
 	/**
 	 * Returns a Weblist of the given id.
@@ -40,23 +31,17 @@ class ListController extends Controller
 	 */
 	public static function addItemToWeblist( $weblistId, $itemDescription )
 	{
-		//$sc = new \Ramsey\Uuid\Codec\StringCodec;
-
 		$uuid = ListAppController::getUUID( 'listitems', 'listitemid' );
 
-		//$uuidString = $sc->encode($uuid);
 		$uuidString = vsprintf( '%08s-%04s-%04s-%02s%02s-%012s', $uuid->getFieldsHex() );
-		\Log::info( 'UUID: ' . $uuidString );
+		//\Log::info( 'UUID: ' . $uuidString );
 
 		$selectedWeblist = \ListApp\Weblist::where('weblistid', $weblistId)->first();
 
 		$newListItem = new \ListApp\Listitem();
-		//$newListItem->listitemid = $uuid;
 		$newListItem->listitemid = $uuidString;
 		$newListItem->description = $itemDescription;
 		$newListItem->save();
-		//$selectedWeblist->listitems()->attach($newListItem->listitemid);
-		//$selectedWeblist->listitems()->attach($uuid);
 		$selectedWeblist->listitems()->attach($uuidString);
 	}
 
