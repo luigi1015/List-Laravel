@@ -39,4 +39,9 @@ class User extends Authenticatable
 	{
 		return $this->hasMany('\ListApp\Permissionuserweblist')->withTimestamps();
 	}
+
+	public function userrole()
+	{
+		return $this->belongsTo('\ListApp\Userrole');
+	}
 }

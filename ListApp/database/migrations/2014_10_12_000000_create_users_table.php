@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateUsersTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the users migration.
      *
      * @return void
      */
@@ -22,12 +22,11 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->integer('active');/*1 = active, 2 = suspended*/
-            $table->integer('type');/*1 = regular*/
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the users migration.
      *
      * @return void
      */
