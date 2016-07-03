@@ -4,7 +4,7 @@ namespace ListApp;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Permissionuserweblist extends Model
+class PermissionUserWeblist extends Model
 {
 	public function weblists()
 	{

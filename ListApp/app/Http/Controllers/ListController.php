@@ -20,11 +20,21 @@ class ListController extends Controller
 
 	/**
 	 * Returns a Weblist of the given id.
+	 * Throws an exception if the user doesn't have read access to that weblist.
 	 */
 	public static function getWeblistByNameid( $weblistId )
 	{
-		$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('nameid', $weblistId)->first();
-		return $selectedWeblist;
+		$permissionId = \ListApp\PermissionUserWeblist::where('usersid', \Auth::user()->userid)->where('weblistid', $weblistId)->first()->permissionid;
+		if( \ListApp\Permission::where('permissionid', $permissionId)->first()->canRead == true )
+		{
+			$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('nameid', $weblistId)->first();
+			return $selectedWeblist;
+		}
+		else
+		{
+			\Log::error( 'getWeblistByNameid( $weblistId ): User "' . \Auth::user()->userid . '" tried to access weblist "' . $weblistId . '" with the permission "' . $permissionId . '" which does not include reading access.' );
+			throw new Exception('Access Denied');
+		}
 	}
 
 	/**

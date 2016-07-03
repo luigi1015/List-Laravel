@@ -20,7 +20,7 @@ class PermissionUserWeblistsTableSeeder extends Seeder
 		foreach( $weblists as $weblist )
 		{
 			//DB::insert('INSERT INTO permission_user_weblist (permission, usersid, weblist_id) VALUES (?, ?, ?)', [$permission->id, $user->userid, $weblist->weblistid]);
-			DB::insert('INSERT INTO permission_user_weblist (permissionid, usersid, weblistid) VALUES (?, ?, ?)', [$permission->permissionid, $user->userid, $weblist->weblistid]);
+			DB::insert('INSERT INTO permission_user_weblists (permissionid, usersid, weblistid) VALUES (?, ?, ?)', [$permission->permissionid, $user->userid, $weblist->weblistid]);
 		}
 
 		//\Log::info($weblists);

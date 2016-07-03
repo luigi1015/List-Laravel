@@ -12,7 +12,7 @@ class CreatePermissionUserWeblistTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('permission_user_weblist', function (Blueprint $table)
+		Schema::create('permission_user_weblists', function (Blueprint $table)
 		{
 			$table->increments('id');
 			$table->timestamps();
@@ -43,6 +43,6 @@ class CreatePermissionUserWeblistTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('permission_user_weblist');
+		Schema::drop('permission_user_weblists');
 	}
 }
