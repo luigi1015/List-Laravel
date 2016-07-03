@@ -24,8 +24,9 @@ class ListController extends Controller
 	 */
 	public static function getWeblistByNameid( $weblistId )
 	{
-		$permissionId = \ListApp\PermissionUserWeblist::where('usersid', \Auth::user()->userid)->where('weblistid', $weblistId)->first()->permissionid;
-		if( \ListApp\Permission::where('permissionid', $permissionId)->first()->canRead == true )
+		$weblist = \ListApp\Weblist::where('nameid', $weblistId)->first();
+		$permission = \ListApp\PermissionUserWeblist::where('usersid', \Auth::user()->userid)->where('weblistid', $weblist->weblistid)->first();
+		if( \ListApp\Permission::where('permissionid', $permission->permissionid)->first()->canRead == true )
 		{
 			$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('nameid', $weblistId)->first();
 			return $selectedWeblist;
