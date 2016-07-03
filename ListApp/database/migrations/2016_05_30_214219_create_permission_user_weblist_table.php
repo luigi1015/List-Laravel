@@ -30,6 +30,9 @@ class CreatePermissionUserWeblistTable extends Migration
 			//Create the list id foreign key.
 			$table->string('weblistid');
 			$table->foreign('weblistid')->references('weblistid')->on('weblists')->onDelete('cascade');
+
+			//Make sure there can be only one permission per user and weblist combination.
+			$table->unique(['usersid', 'weblistid']);
 		});
 	}
 
