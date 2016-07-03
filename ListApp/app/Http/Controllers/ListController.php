@@ -13,7 +13,8 @@ class ListController extends Controller
 	 */
 	public static function getUsersWeblists()
 	{
-		$weblistIds = \DB::table('permission_user_weblist')->join('permissions', 'permission_user_weblist.permissionid', '=', 'permissions.permissionid')->whereIn('title', ['Edit', 'Read', 'Owner'])->where('usersid', \Auth::user()->userid)->pluck('weblistid');
+		//$weblistIds = \DB::table('permission_user_weblist')->join('permissions', 'permission_user_weblist.permissionid', '=', 'permissions.permissionid')->whereIn('title', ['Edit', 'Read', 'Owner'])->where('usersid', \Auth::user()->userid)->pluck('weblistid');
+		$weblistIds = \DB::table('permission_user_weblist')->join('permissions', 'permission_user_weblist.permissionid', '=', 'permissions.permissionid')->where('canRead', true)->where('usersid', \Auth::user()->userid)->pluck('weblistid');
 		return \ListApp\Weblist::whereIn('weblistid', $weblistIds)->orderBy('title','asc')->get();
 	}
 
