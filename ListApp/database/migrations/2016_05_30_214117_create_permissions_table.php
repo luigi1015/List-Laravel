@@ -17,6 +17,10 @@ class CreatePermissionsTable extends Migration
             $table->string('permissionid')->primary();
 			$table->timestamps();
 			$table->string('title');
+			$table->boolean('canEdit')->default(false);
+			$table->boolean('canRead')->default(false);
+			$table->boolean('canCreate')->default(false);
+			$table->boolean('canDelete')->default(false);
 		});
 	}
 
