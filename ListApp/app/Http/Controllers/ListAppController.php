@@ -100,7 +100,23 @@ class ListAppController extends Controller
 	 */
 	public function getHome()
 	{
-		return view('home')->with('lists', ListController::getUsersWeblists());
+		return view('home')->with('lists', ListController::getUsersWeblists())->with('activePage', 'userhome');
+	}
+
+	/**
+	 * Responds to GET /settings
+	 */
+	public function getSettings()
+	{
+		return view('settings')->with('activePage', 'settings');
+	}
+
+	/**
+	 * Responds to GET /
+	 */
+	public function getRoot()
+	{
+		return view('welcome')->with('activePage', 'root');
 	}
 
 	/**

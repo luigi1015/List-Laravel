@@ -11,35 +11,37 @@
 |
 */
 
-Route::get('/', function () {
-	return view('welcome');
+Route::group(['middleware' => 'throttle:30'], function ()
+{
+	Route::get('/', 'ListAppController@getRoot')->name('root');
 });
 
-Route::group(['middleware' => 'auth'], function ()
+Route::group(['middleware' => ['auth', 'throttle:30']], function ()
 {
-	Route::get('/home', 'ListAppController@getHome')->name('home');
+	Route::get('/home', 'ListAppController@getHome')->name('userhome');
 	Route::get('/list/{id}', 'ListAppController@getList')->name('list');
 	Route::post('/additem', 'ListAppController@postAddItem');
 	Route::post('/deleteitem', 'ListAppController@postDeleteItem');
 	Route::post('/deletetag', 'ListAppController@postDeleteTag');
 	Route::post('/addweblist', 'ListAppController@postAddWeblist');
 	Route::post('/updateweblist', 'ListAppController@postUpdateWeblist');
+	Route::get('/settings', 'ListAppController@getSettings')->name('settings');
 });
 
 /*Show login*/
-Route::get('/login', 'Auth\AuthController@getLogin');
+Route::get('/login', 'Auth\AuthController@getLogin')->name('login');
 
 /*Process login*/
 Route::post('/login', 'Auth\AuthController@postLogin');
 
 /*Show registration*/
-Route::get('/register', 'Auth\AuthController@getRegister');
+Route::get('/register', 'Auth\AuthController@getRegister')->name('register');
 
 /*Process registration*/
 Route::post('/register', 'Auth\AuthController@postRegister');
 
 /*Process logout*/
-Route::get('/logout', 'Auth\AuthController@logout');
+Route::get('/logout', 'Auth\AuthController@logout')->name('logout');
 
 /*Show logout confirmation*/
 Route::get('/logout/confirm', 'Auth\AuthController@confirmLogout');

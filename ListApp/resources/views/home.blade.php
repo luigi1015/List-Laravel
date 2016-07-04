@@ -5,10 +5,12 @@
 @stop
 
 @section('content')
-		Welcome to your user home page.
+		Welcome, {{ Auth::user()->name }}!
 		<br>
+{{--
 		Your user id is {{ Auth::user()->userid }}
 		<br>
+--}}
 		Your Lists:
 		<br>
 		@foreach( $lists as $list )
