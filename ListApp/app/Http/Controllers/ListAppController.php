@@ -225,6 +225,20 @@ class ListAppController extends Controller
 	}
 
 	/**
+	 * Responds to POST /updateweblist
+	 */
+	public function postUpdateWeblist(Request $request)
+	{
+		$this->validate($request, [
+			'listId' => 'required',
+			'listNameId' => 'required',
+		]);
+
+		Session::flash( 'message', 'Got a request to update listid: ' . Input::get('listId') . ' listnameid: ' . Input::get('listNameId') );
+		return \Redirect::route( 'list', array('id' => Input::get('listNameId')) );
+	}
+
+	/**
 	 * Pushes a message onto the Session flash message as part of an array.
 	 */
 	public function addFlashMessage( $flashMessage )

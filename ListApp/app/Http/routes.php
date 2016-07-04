@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth'], function ()
 	Route::post('/deleteitem', 'ListAppController@postDeleteItem');
 	Route::post('/deletetag', 'ListAppController@postDeleteTag');
 	Route::post('/addweblist', 'ListAppController@postAddWeblist');
+	Route::post('/updateweblist', 'ListAppController@postUpdateWeblist');
 });
 
 /*Show login*/
