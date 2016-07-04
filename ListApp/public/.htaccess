@@ -18,3 +18,9 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 </IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive on
+  ExpiresByType text/css                  "access plus 1 minute"
+  ExpiresByType application/javascript    "access plus 1 minute"
+</IfModule>
