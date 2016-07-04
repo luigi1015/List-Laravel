@@ -21,6 +21,7 @@ class WeblistsTableSeeder extends Seeder
 			$list->weblistid = $uuid;
 			$list->title = $listTitle;
 			$list->nameid = str_replace(" ", "-", $listTitle);
+			$list->public = false;
 			$list->save();
 		}
 	}

@@ -16,8 +16,8 @@ class CreateListitemsTable extends Migration
 		{
 			$table->string('listitemid')->primary();
 			$table->timestamps();
-			$table->string('description');
-			$table->boolean('checked')->default(false);
+			$table->string('description')->default('')->nullable(false);
+			$table->boolean('checked')->default(false)->nullable(false);
 		});
 	}
 

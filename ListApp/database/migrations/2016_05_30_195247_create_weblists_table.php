@@ -18,6 +18,7 @@ class CreateWeblistsTable extends Migration
 			$table->timestamps();
 			$table->string('title');
 			$table->string('nameid')->unique();//An ID to use in stuff that needs an ID but should be human readable, like a URL.
+			$table->boolean('public')->default(false)->nullable(false);
 		});
 	}
 

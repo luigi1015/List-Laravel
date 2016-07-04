@@ -17,10 +17,10 @@ class CreateUserrolesTable extends Migration
             $table->string('userroleid')->primary();
             $table->string('name');
             $table->timestamps();
-			$table->boolean('canEdit')->default(false);
-			$table->boolean('canRead')->default(false);
-			$table->boolean('canCreate')->default(false);
-			$table->boolean('canDelete')->default(false);
+			$table->boolean('canEdit')->default(false)->nullable(false);
+			$table->boolean('canRead')->default(false)->nullable(false);
+			$table->boolean('canCreate')->default(false)->nullable(false);
+			$table->boolean('canDelete')->default(false)->nullable(false);
         });
     }
 
