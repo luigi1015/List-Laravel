@@ -132,6 +132,18 @@ class ListAppController extends Controller
 	}
 
 	/**
+	 * Responds to GET {username}/list/{id}
+	 */
+	public function getUsersList($username, $id)
+	{
+		//TODO: Probably want to add some sort of check to make sure $id is a valid id. That way the app can handle the error properly.
+
+		$selectedWeblist = ListController::getWeblistByNameid( $id );
+		//\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
+		return view('list')->with('list', $selectedWeblist);
+	}
+
+	/**
 	 * Responds to POST /additem
 	 */
 	public function postAddItem()
