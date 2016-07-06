@@ -13,8 +13,8 @@
 				<a href='/' @if( isset($activePage) && $activePage == 'root' ) class='active' @endif>Homepage</a><!--
 				-->@if( Auth::check() )<!--
 					-->{{-- You are logged in as {{ Auth::user()->name }} --}}<!--
-					--><a href='/home' @if( isset($activePage) && $activePage == 'userhome' ) class='active' @endif>User Home</a><!--
-					--><a href='/settings' @if( isset($activePage) && $activePage == 'settings' ) class='active' @endif>Settings</a><!--
+					--><a href='/home' @if( isset($activePage) && $activePage == 'userhome' ) class='active' @endif>User Home</a>@if( (isset($isAdmin) && $isAdmin == true) || (isset($isRoot) && $isRoot == true) )<!--
+					--><a href='/settings' @if( isset($activePage) && $activePage == 'settings' ) class='active' @endif>Settings</a>@endif<!--
 					--><a href='/logout'>Logout</a><!--
 				-->@else<!--
 					--><a href='/login' @if( isset($activePage) && $activePage == 'login' ) class='active' @endif>Login</a><!--

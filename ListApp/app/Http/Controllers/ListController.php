@@ -22,19 +22,23 @@ class ListController extends Controller
 	 * Returns a Weblist of the given id.
 	 * Throws an exception if the user doesn't have read access to that weblist.
 	 */
-	public static function getWeblistByNameid( $weblistId )
+	public static function getWeblistByUseridAndNameid( $userid, $weblistNameid )
 	{
-		$weblist = \ListApp\Weblist::where('nameid', $weblistId)->first();
-		$permission = \ListApp\PermissionUserWeblist::where('usersid', \Auth::user()->userid)->where('weblistid', $weblist->weblistid)->first();
-		if( \ListApp\Permission::where('permissionid', $permission->permissionid)->first()->canRead == true )
+		$info = \DB::table('weblists')->join('permission_user_weblists','weblists.weblistid','=','permission_user_weblists.weblistid')->join('permissions','permissions.permissionid','=','permission_user_weblists.permissionid')->where('permissions.title','Owner')->where('weblists.nameid',$weblistNameid)->where('permission_user_weblists.usersid',$userid)->pluck('weblists.weblistid');
+
+		//\Log::info($info);
+		//$permission = \ListApp\PermissionUserWeblist::where('usersid', \Auth::user()->userid)->where('weblistid', $info->weblistid)->first();
+		//if( \ListApp\Permission::where('permissionid', $permission->permissionid)->first()->canRead == true )
+		//if( ListController::canReadWeblist($info[0]) )
+		if( ListController::canReadWeblist($info[0]) )
 		{
-			$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('nameid', $weblistId)->first();
+			//$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('weblistid', $info->weblistid)->first();
+			$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('weblistid', $info[0])->first();
 			return $selectedWeblist;
 		}
 		else
 		{
-			\Log::error( 'getWeblistByNameid( $weblistId ): User "' . \Auth::user()->userid . '" tried to access weblist "' . $weblistId . '" with the permission "' . $permissionId . '" which does not include reading access.' );
-			throw new Exception('Access Denied');
+			\Log::error( 'getWeblistByUseridAndNameid( $userid, $weblistId ): User "' . \Auth::user()->userid . '" tried to access weblist "' . $weblistNameid . '" without permission.' );
 		}
 	}
 
@@ -108,5 +112,50 @@ class ListController extends Controller
 		$newWeblist->save();
 
 		\DB::insert('INSERT INTO permission_user_weblists (permissionid, usersid, weblistid) VALUES (?, ?, ?)', [$permission->permissionid, $userid, $newWeblist->weblistid]);
+	}
+
+	/**
+	 * Returns wether the current logged in user (or anybody if nobody is logged in) can read a Weblist of the given id.
+	 */
+	public static function canReadWeblist( $weblistId )
+	{
+		if( \ListApp\Weblist::where('weblistid', $weblistId)->first()->public == true )
+		{
+			return true;
+		}
+		else if( \Auth::check() )
+		{//If someone is logged in.
+			$info = \DB::table('weblists')->join('permission_user_weblists','weblists.weblistid','=','permission_user_weblists.weblistid')->join('permissions','permissions.permissionid','=','permission_user_weblists.permissionid')->where('weblists.weblistid',$weblistId)->where('permission_user_weblists.usersid',\Auth::user()->userid)->first();
+
+			if( is_null($info) )
+			{
+				return false;
+			}
+			else
+			{
+				return $info->canRead == true;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Returns the owner user id of the Weblist of the given id.
+	 */
+	public static function getWeblistOwner( $weblistId )
+	{
+		$userid = \DB::table('permission_user_weblists')->join('permissions', 'permission_user_weblists.permissionid', '=', 'permissions.permissionid')->where('permissions.title', 'Owner')->where('weblistid', $weblistId)->pluck('usersid');
+
+		if( is_null($userid) )
+		{
+			return null;
+		}
+		else
+		{
+			return $userid[0];
+		}
 	}
 }

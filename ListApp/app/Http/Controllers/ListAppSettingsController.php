@@ -28,8 +28,23 @@ class ListAppSettingsController extends Controller
 	 */
 	public static function isCurrentUserAdmin()
 	{
-		$role = \ListApp\Userrole::where('userroleid', \Auth::user()->userrole )->first();
-		return $role->name == 'Admin';
+		if( \Auth::check() )
+		{
+			$role = \ListApp\Userrole::where('userroleid', \Auth::user()->userrole )->first();
+		}
+		else
+		{
+			return false;
+		}
+
+		if( is_null($role) )
+		{
+			return false;
+		}
+		else
+		{
+			return $role->name == 'Admin';
+		}
 	}
 
 	/**
@@ -37,7 +52,22 @@ class ListAppSettingsController extends Controller
 	 */
 	public static function isCurrentUserRoot()
 	{
-		$role = \ListApp\Userrole::where('userroleid', \Auth::user()->userrole )->first();
-		return $role->name == 'Root';
+		if( \Auth::check() )
+		{
+			$role = \ListApp\Userrole::where('userroleid', \Auth::user()->userrole )->first();
+		}
+		else
+		{
+			return false;
+		}
+
+		if( is_null($role) )
+		{
+			return false;
+		}
+		else
+		{
+			return $role->name == 'Root';
+		}
 	}
 }

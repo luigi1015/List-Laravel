@@ -100,7 +100,7 @@ class ListAppController extends Controller
 	 */
 	public function getHome()
 	{
-		return view('home')->with('lists', ListController::getUsersWeblists())->with('activePage', 'userhome');
+		return view('home')->with('lists', ListController::getUsersWeblists())->with('activePage', 'userhome')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 	}
 
 	/**
@@ -108,7 +108,15 @@ class ListAppController extends Controller
 	 */
 	public function getSettings()
 	{
-		return view('settings')->with('activePage', 'settings');
+		if( ListAppSettingsController::isCurrentUserAdmin() == true || ListAppSettingsController::isCurrentUserRoot() == true )
+		{
+			return view('settings')->with('activePage', 'settings')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+		}
+		else
+		{
+			Session::flash( 'error', 'You do not have access to that page.' );
+			return redirect('/')->with('activePage', 'root')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+		}
 	}
 
 	/**
@@ -116,8 +124,16 @@ class ListAppController extends Controller
 	 */
 	public function getUsers()
 	{
-		$users = ListAppSettingsController::getUsers();
-		return view('users')->with('users', $users)->with('activePage', 'settings');
+		if( ListAppSettingsController::isCurrentUserAdmin() == true || ListAppSettingsController::isCurrentUserRoot() == true )
+		{
+			$users = ListAppSettingsController::getUsers();
+			return view('users')->with('users', $users)->with('activePage', 'settings')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+		}
+		else
+		{
+			Session::flash( 'error', 'You do not have access to that page.' );
+			return redirect('/')->with('activePage', 'root')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+		}
 	}
 
 	/**
@@ -125,7 +141,7 @@ class ListAppController extends Controller
 	 */
 	public function getRoot()
 	{
-		return view('welcome')->with('activePage', 'root');
+		return view('welcome')->with('activePage', 'root')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 	}
 
 	/**
@@ -137,7 +153,7 @@ class ListAppController extends Controller
 
 		$selectedWeblist = ListController::getWeblistByNameid( $id );
 		//\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
-		return view('list')->with('list', $selectedWeblist);
+		return view('list')->with('list', $selectedWeblist)->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 	}
 
 	/**
@@ -147,11 +163,12 @@ class ListAppController extends Controller
 	{
 		//TODO: Probably want to add some sort of check to make sure $id is a valid id. That way the app can handle the error properly.
 
-		$selectedWeblist = ListController::getWeblistByNameid( $id );
+		$user = \ListApp\User::where('username', $username)->first();
+		$selectedWeblist = ListController::getWeblistByUseridAndNameid( $user->userid, $id );
 		//\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
-		\Log::info( 'Got request for user ' . $username . ' and list ' . $id . '.' );
-		return view('list');
-		//return view('list')->with('list', $selectedWeblist);
+		//\Log::info( 'Got request for user ' . $username . ' and list ' . $id . '.' );
+		//return view('list');
+		return view('list')->with('list', $selectedWeblist)->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 	}
 
 	/**
@@ -163,11 +180,22 @@ class ListAppController extends Controller
 
 		if( Input::has('listId') && Input::has('itemDescription') )
 		{
-
 			$listId = Input::get('listId');
 			ListController::addItemToWeblist( $listId, Input::get('itemDescription') );
+			$ownerid = ListController::getWeblistOwner($listId);
+			if( !is_null($ownerid) )
+			{
+				\Log::error( 'In postAddItem(), weblist ' . $listId );
+				$owner = \ListApp\User::where('userid', $ownerid)->first();
 
-			return redirect()->route( 'list', [\ListApp\Weblist::where('weblistid', $listId)->first()->nameid] );
+				return redirect()->route( 'list', [$owner->username, \ListApp\Weblist::where('weblistid', $listId)->first()->nameid] )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+			}
+			else
+			{
+				Session::flash( 'error', 'There was a problem adding the item.' );
+				\Log::error( 'In postAddItem(), There was a problem adding the item, can not find the weblist owner for weblist ' . $listId );
+				return view('welcome')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+			}
 
 			/*
 			\Log::info( 'postAddItem(): userid: ' . \Auth::user()->userid );
@@ -178,8 +206,8 @@ class ListAppController extends Controller
 		else
 		{
 			Session::flash( 'error', 'There was a problem adding the item.' );
-			\Log::error('In postAddItem(), Did not get the required info, listId and itemDescription (maybe more if Ive forgotten to update this message.');
-			return view('welcome');
+			\Log::error( 'In postAddItem(), Did not get the required info, listId and itemDescription (maybe more if Ive forgotten to update this message.' );
+			return view('welcome')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 		}
 	}
 
@@ -201,14 +229,14 @@ class ListAppController extends Controller
 				\Log::error('In postDeleteItem(), could not delete list item for itemId ' . $itemId . ' and listId ' . $listId . ' (maybe more if Ive forgotten to update this message.');
 			}
 			//return \Redirect::route( 'list', array('id' => $listId) );
-			return \Redirect::route( 'list', array('id' => \ListApp\Weblist::where('weblistid', $listId)->first()->nameid) );
+			return \Redirect::route( 'list', array('id' => \ListApp\Weblist::where('weblistid', $listId)->first()->nameid) )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 		}
 		else
 		{
 			Session::flash( 'error', 'There was a problem deleting the item.' );
 			\Log::error('In postDeleteItem(), Did not get the required info, itemId and listId (maybe more if Ive forgotten to update this message.');
 			//return view('welcome');
-			return \Redirect::route( 'list', array('id' => \ListApp\Weblist::where('weblistid', $listId)->first()->nameid) );
+			return \Redirect::route( 'list', array('id' => \ListApp\Weblist::where('weblistid', $listId)->first()->nameid) )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 		}
 	}
 
@@ -230,13 +258,13 @@ class ListAppController extends Controller
 				Session::flash( 'error', 'Could not delete that item.' );
 				\Log::error('In postDeleteTag(), could not delete list item for itemId ' . $itemId . ' and listId ' . $listId . ' and tagId ' . $tagId . ' (maybe more if Ive forgotten to update this message.');
 			}
-			return \Redirect::route( 'list', array('id' => $listId) );
+			return \Redirect::route( 'list', array('id' => $listId) )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 		}
 		else
 		{
 			Session::flash( 'error', 'There was a problem deleting the item.' );
 			\Log::error('In postDeleteTag(), Did not get the required info, itemId and listId and tagId (maybe more if Ive forgotten to update this message.');
-			return view('welcome');
+			return view('welcome')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 		}
 	}
 
@@ -253,13 +281,13 @@ class ListAppController extends Controller
 		if( Input::has('listTitle') && Input::has('listId') )
 		{
 			ListController::addWeblist( Input::get('listTitle'), Input::get('listId'), $request->user()->userid );
-			return \Redirect::route( 'home' );
+			return \Redirect::route( 'root' )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 		}
 		else
 		{
 			Session::flash( 'error', 'There was a problem adding the item.' );
 			\Log::error('In postAddWeblist(), Did not get the required info, listTitle and listId (maybe more if Ive forgotten to update this message.');
-			return \Redirect::route( 'home' );
+			return \Redirect::route( 'root' )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 		}
 	}
 
@@ -274,7 +302,7 @@ class ListAppController extends Controller
 		]);
 
 		Session::flash( 'message', 'Got a request to update listid: ' . Input::get('listId') . ' listnameid: ' . Input::get('listNameId') );
-		return \Redirect::route( 'list', array('id' => Input::get('listNameId')) );
+		return \Redirect::route( 'list', array('id' => Input::get('listNameId')) )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 	}
 
 	/**
