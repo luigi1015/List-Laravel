@@ -103,6 +103,44 @@ main
 	}
 }
 
+table
+{
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+td, th
+{
+	border: 1px solid black;
+	padding: 0.5em;
+}
+
+td
+{
+	text-align: center;
+}
+
+th
+{
+	color: #FFFFFF;
+	background-color: #606060;
+}
+
+tr:nth-child(even)
+{
+	background-color: #E8E8E8;
+}
+
+tr:hover
+{
+	background-color: #87CEFA;
+}
+
+tr.selectedRow
+{
+	background-color: #A0A0A0;
+}
+
 @media only screen and (max-width: 800px)
 {
 	pre

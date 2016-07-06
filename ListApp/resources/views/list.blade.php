@@ -17,34 +17,30 @@
 		<br>
 		List items:
 		<br>
+		<table>
+			<tr>
+				<th>Select</th>
+				<th>Item</th>
+				<th>Delete</th>
+			</tr>
 		@foreach( $list->listitems as $listItem )
-			<input type="checkbox" id="checkbox-{{ $listItem->listitemid }}" name="checkbox-{{ $listItem->listitemid }}" value="checkbox-{{ $listItem->listitemid }}">
-			<label for="checkbox-{{ $listItem->listitemid }}">{{ $listItem->description }}</label>
-			{{--
-			@foreach( $listItem->tags as $tag )
-				<form method="post" action="/deletetag">
-					{!! csrf_field() !!}
-					<input type="hidden" name="listId" value="{{ $list->weblistid }}">
-					<input type="hidden" name="itemId" value="{{ $listItem->listitemid }}">
-					<input type="hidden" name="tagId" value="{{ $tag->tagid }}">
-					{{ $tag->description }}
-					<br>
-					<input type="submit" value="Delete Tag">
-				</form>
-			@endforeach
-			<form method="post" action="/deleteitem">
-				{!! csrf_field() !!}
-				<input type="hidden" name="listId" value="{{ $list->weblistid }}">
-				<input type="hidden" name="itemId" value="{{ $listItem->listitemid }}">
-				<br>
-				<input type="submit" value="Delete Item">
-			</form>
-			--}}
-			<br>
+			<tr @if( $listItem->checked == true) class='selectedRow' @endif>
+				<td>
+					<input type="checkbox" id="checkbox-selected-{{ $listItem->listitemid }}" name="checkbox-selected-{{ $listItem->listitemid }}" value="checkbox-{{ $listItem->listitemid }}" @if( $listItem->checked == true) checked @endif>
+				</td>
+				<td>
+					<label for="checkbox-selected-{{ $listItem->listitemid }}">{{ $listItem->description }}</label>
+				</td>
+				<td>
+					<input type="checkbox" id="checkbox-delete-{{ $listItem->listitemid }}" name="checkbox-delete-{{ $listItem->listitemid }}" value="checkbox-{{ $listItem->listitemid }}">
+				</td>
+			</tr>
 		@endforeach
+		</table>
+		<br>
 		<input type="submit" value="Update">
 		</form>
-
+		<br>
 		<fieldset>
 			<legend>Add List Item</legend>
 			<form method="post" action="/additem">
