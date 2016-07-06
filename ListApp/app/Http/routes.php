@@ -20,13 +20,14 @@ Route::group(['middleware' => ['auth', 'throttle:30']], function ()
 {
 	Route::get('/home', 'ListAppController@getHome')->name('userhome');
 	//Route::get('/list/{id}', 'ListAppController@getList')->name('list');
-	Route::get('{username}/list/{id}', 'ListAppController@getUsersList')->name('list');
+	Route::get('/user/{username}/list/{id}', 'ListAppController@getUsersList')->name('list');
 	Route::post('/additem', 'ListAppController@postAddItem');
 	Route::post('/deleteitem', 'ListAppController@postDeleteItem');
 	Route::post('/deletetag', 'ListAppController@postDeleteTag');
 	Route::post('/addweblist', 'ListAppController@postAddWeblist');
 	Route::post('/updateweblist', 'ListAppController@postUpdateWeblist');
 	Route::get('/settings', 'ListAppController@getSettings')->name('settings');
+	Route::get('/settings/users', 'ListAppController@getUsers');
 });
 
 /*Show login*/

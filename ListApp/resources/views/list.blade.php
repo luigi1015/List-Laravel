@@ -1,10 +1,11 @@
 @extends('layouts.masterTemplate')
 
 @section('title')
-	{{ $list->title }}
+	{{ $list->title or 'Unknown List' }}
 @stop
 
 @section('content')
+	@if( isset($list) )
 		List title: {{ $list->title }}
 		<br>
 		<form method="post" action="/updateweblist">
@@ -55,4 +56,7 @@
 				<input type="submit">
 			</form>
 		</fieldset>
+	@else
+		Could not find the list.
+	@endif
 @stop

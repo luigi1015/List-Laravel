@@ -112,6 +112,15 @@ class ListAppController extends Controller
 	}
 
 	/**
+	 * Responds to GET /settings/users
+	 */
+	public function getUsers()
+	{
+		$users = ListAppSettingsController::getUsers();
+		return view('users')->with('users', $users)->with('activePage', 'settings');
+	}
+
+	/**
 	 * Responds to GET /
 	 */
 	public function getRoot()
@@ -140,7 +149,9 @@ class ListAppController extends Controller
 
 		$selectedWeblist = ListController::getWeblistByNameid( $id );
 		//\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
-		return view('list')->with('list', $selectedWeblist);
+		\Log::info( 'Got request for user ' . $username . ' and list ' . $id . '.' );
+		return view('list');
+		//return view('list')->with('list', $selectedWeblist);
 	}
 
 	/**

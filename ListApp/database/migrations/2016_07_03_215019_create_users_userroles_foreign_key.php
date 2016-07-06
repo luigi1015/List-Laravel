@@ -14,8 +14,8 @@ class CreateUsersUserrolesForeignKey extends Migration
     {
         Schema::table('users', function (Blueprint $table)
         {
-			$table->string('role')->nullable();
-            $table->foreign('role')->references('userroleid')->on('userroles')->onDelete('set null');
+			$table->string('userrole')->nullable();
+            $table->foreign('userrole')->references('userroleid')->on('userroles')->onDelete('set null');
         });
     }
 

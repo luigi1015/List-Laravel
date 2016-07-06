@@ -18,7 +18,7 @@ class UserroleTableSeeder extends Seeder
 
 		$role = new \ListApp\Userrole();
 		$role->userroleid = $uuid;
-		$role->name = "Owner";
+		$role->name = "Root";
 		$role->canEdit = true;
 		$role->canRead = true;
 		$role->canCreate = true;

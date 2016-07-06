@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
 	{
 		$uuid = ListAppController::getUUID( 'users', 'userid' );
 
-		$role = \ListApp\Userrole::where('name', 'Owner')->first();
+		$role = \ListApp\Userrole::where('name', 'Root')->first();
 
 		DB::table('users')->insert([
 			'created_at' => Carbon\Carbon::now()->toDateTimeString(),
@@ -29,7 +29,7 @@ class UsersTableSeeder extends Seeder
 			'email' => 'j2013@crone.me',
 			'password' => \Hash::make('bowser1015'),
 			'active' => 1,
-			'role' => $role->userroleid
+			'userrole' => $role->userroleid
 		]);
 		/*\Log::info('Created user with UUID: ' . $uuid );*/
     }
