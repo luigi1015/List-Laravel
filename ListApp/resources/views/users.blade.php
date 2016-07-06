@@ -8,7 +8,7 @@
 		Users:
 		<br>
 		@foreach( $users as $user )
-			{{ $user->name }}
+			{{ $user->userid }} - {{ $user->username }} - {{ $user->name }}
 			<br>
 		@endforeach
 @stop
