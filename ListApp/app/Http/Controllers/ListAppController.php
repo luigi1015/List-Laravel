@@ -157,6 +157,15 @@ class ListAppController extends Controller
 	}
 
 	/**
+	 * Responds to GET /user/{username}/lists
+	 */
+	public function getListsOfUser($username)
+	{
+		$weblists = ListController::getWeblistsOfUser( $username );
+		return view('listsofuser')->with('lists', $weblists)->with('username', $username)->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+	}
+
+	/**
 	 * Responds to GET {username}/list/{id}
 	 */
 	public function getUsersList($username, $id)

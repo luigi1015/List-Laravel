@@ -14,6 +14,7 @@
 Route::group(['middleware' => 'throttle:30'], function ()
 {
 	Route::get('/', 'ListAppController@getRoot')->name('root');
+	Route::get('/user/{username}/lists', 'ListAppController@getListsOfUser')->name('userlist');
 });
 
 Route::group(['middleware' => ['auth', 'throttle:30']], function ()
@@ -29,6 +30,7 @@ Route::group(['middleware' => ['auth', 'throttle:30']], function ()
 	Route::get('/settings', 'ListAppController@getSettings')->name('settings');
 	Route::get('/settings/users', 'ListAppController@getUsers');
 });
+
 
 /*Show login*/
 Route::get('/login', 'Auth\AuthController@getLogin')->name('login');

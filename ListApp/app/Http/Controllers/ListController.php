@@ -158,4 +158,17 @@ class ListController extends Controller
 			return $userid[0];
 		}
 	}
+
+	/**
+	 * Returns the lists owned by user indicated by $username and viewable bt the logged in user (or public lists if user isn't logged in).
+	 */
+	public static function getWeblistsOfUser( $username )
+	{
+		$user = \ListApp\User::where('username', $username)->first();
+		$weblistIds = \DB::table('permission_user_weblists')->join('permissions', 'permission_user_weblists.permissionid', '=', 'permissions.permissionid')->where('permissions.title', 'Owner')->where('usersid', $user->userid)->pluck('weblistid');
+
+		//return \DB::table('weblists')->whereIn('weblistid', $weblistIds)->where('public', true);
+		//return \ListApp\Weblist::whereIn('weblistid', $weblistIds)->where('public', true)->all();
+		//return \ListApp\Weblist::all();
+	}
 }
