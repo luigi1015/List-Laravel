@@ -162,6 +162,7 @@ class ListAppController extends Controller
 	public function getListsOfUser($username)
 	{
 		$weblists = ListController::getWeblistsOfUser( $username );
+		//\Log::info('Got ' . $weblists->count() . ' weblists.');
 		return view('listsofuser')->with('lists', $weblists)->with('username', $username)->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 	}
 

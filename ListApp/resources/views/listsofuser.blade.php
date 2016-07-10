@@ -9,7 +9,7 @@
 		<br>
 		@if( isset($lists) && !empty($lists) )
 			@foreach( $lists as $list )
-				{{ $list->title or 'Unknown' }}
+				<a href='/user/{{ $username or "unknown" }}/list/{{ $list->nameid }}'>{{ $list->title  or 'Unknown'}}</a>
 				<br>
 			@endforeach
 		@endif

@@ -27,18 +27,17 @@ class ListController extends Controller
 		$info = \DB::table('weblists')->join('permission_user_weblists','weblists.weblistid','=','permission_user_weblists.weblistid')->join('permissions','permissions.permissionid','=','permission_user_weblists.permissionid')->where('permissions.title','Owner')->where('weblists.nameid',$weblistNameid)->where('permission_user_weblists.usersid',$userid)->pluck('weblists.weblistid');
 
 		//\Log::info($info);
-		//$permission = \ListApp\PermissionUserWeblist::where('usersid', \Auth::user()->userid)->where('weblistid', $info->weblistid)->first();
-		//if( \ListApp\Permission::where('permissionid', $permission->permissionid)->first()->canRead == true )
-		//if( ListController::canReadWeblist($info[0]) )
-		if( ListController::canReadWeblist($info[0]) )
+		if( !empty($info) )
 		{
-			//$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('weblistid', $info->weblistid)->first();
-			$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('weblistid', $info[0])->first();
-			return $selectedWeblist;
-		}
-		else
-		{
-			\Log::error( 'getWeblistByUseridAndNameid( $userid, $weblistId ): User "' . \Auth::user()->userid . '" tried to access weblist "' . $weblistNameid . '" without permission.' );
+			if( ListController::canReadWeblist($info[0]) )
+			{
+				$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('weblistid', $info[0])->first();
+				return $selectedWeblist;
+			}
+			else
+			{
+				\Log::error( 'getWeblistByUseridAndNameid( $userid, $weblistId ): User "' . \Auth::user()->userid . '" tried to access weblist "' . $weblistNameid . '" without permission.' );
+			}
 		}
 	}
 
@@ -167,8 +166,16 @@ class ListController extends Controller
 		$user = \ListApp\User::where('username', $username)->first();
 		$weblistIds = \DB::table('permission_user_weblists')->join('permissions', 'permission_user_weblists.permissionid', '=', 'permissions.permissionid')->where('permissions.title', 'Owner')->where('usersid', $user->userid)->pluck('weblistid');
 
-		//return \DB::table('weblists')->whereIn('weblistid', $weblistIds)->where('public', true);
-		//return \ListApp\Weblist::whereIn('weblistid', $weblistIds)->where('public', true)->all();
-		//return \ListApp\Weblist::all();
+		//$weblists = \ListApp\Weblist::where('public', true)->get();
+		$weblists = collect([]);
+		foreach( $weblistIds as $weblistId )
+		{
+			$weblist = \ListApp\Weblist::where('weblistid', $weblistId)->first();
+			if( $weblist->public == true )
+			{
+				$weblists->push($weblist);
+			}
+		}
+		return $weblists;
 	}
 }

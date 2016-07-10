@@ -4,6 +4,7 @@
 		<meta charset="UTF-8">
 		<title>@yield('title','Welcome to Lists!')</title>
 		<link rel="stylesheet" href="{{ URL::asset('css/masterTemplate.css') }}">
+		<script src="{{ URL::asset('js/mainJavaScript.js') }}"></script>
 		@yield( 'headerContent' )
 	</head>
 	<body>
