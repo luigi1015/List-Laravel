@@ -167,7 +167,7 @@ class ListAppController extends Controller
 	}
 
 	/**
-	 * Responds to GET {username}/list/{id}
+	 * Responds to GET /user/{username}/list/{id}
 	 */
 	public function getUsersList($username, $id)
 	{
@@ -178,7 +178,7 @@ class ListAppController extends Controller
 		//\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
 		//\Log::info( 'Got request for user ' . $username . ' and list ' . $id . '.' );
 		//return view('list');
-		return view('list')->with('list', $selectedWeblist)->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+		return view('list')->with('list', $selectedWeblist)->with('username', $username)->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 	}
 
 	/**
@@ -312,7 +312,7 @@ class ListAppController extends Controller
 		]);
 
 		Session::flash( 'message', 'Got a request to update listid: ' . Input::get('listId') . ' listnameid: ' . Input::get('listNameId') );
-		return \Redirect::route( 'list', array('id' => Input::get('listNameId')) )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+		return \Redirect::route( 'list', array('username' => Input::get('username'), 'id' => Input::get('listNameId')) )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 	}
 
 	/**
