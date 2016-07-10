@@ -4,6 +4,10 @@
 	{{ $list->title or 'Unknown List' }}
 @stop
 
+@section('headerContent')
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+@stop
+
 @section('content')
 	@if( isset($list) )
 		List title: {{ $list->title }}
@@ -17,16 +21,16 @@
 		<br>
 		List items:
 		<br>
-		<table>
+		<table ng-app="">
 			<tr>
 				<th>Select</th>
 				<th>Item</th>
 				<th>Delete</th>
 			</tr>
-		@foreach( $list->listitems as $listItem )
-			<tr @if( $listItem->checked == true) class='selectedRow' @endif>
+		@foreach( $list->listitems as $key=>$listItem )
+			<tr ng-class="{selectedRow: checkbox{{$key}}}" @if( $listItem->checked == true ) class='selectedRow' @endif>
 				<td>
-					<input type="checkbox" id="checkbox-selected-{{ $listItem->listitemid }}" name="checkbox-selected-{{ $listItem->listitemid }}" value="checkbox-{{ $listItem->listitemid }}" @if( $listItem->checked == true) checked @endif>
+					<input type="checkbox" id="checkbox-selected-{{ $listItem->listitemid }}" name="checkbox-selected-{{ $listItem->listitemid }}" value="checkbox-{{ $listItem->listitemid }}" ng-model="checkbox{{$key}}" @if( $listItem->checked == true) checked @endif>
 				</td>
 				<td>
 					<label for="checkbox-selected-{{ $listItem->listitemid }}">{{ $listItem->description }}</label>
