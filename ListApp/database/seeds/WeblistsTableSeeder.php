@@ -13,6 +13,7 @@ class WeblistsTableSeeder extends Seeder
 	public function run()
 	{
 		$listTitles = ['List 01','List 02','List 03','List 04','List 05','List 06','List 07'];
+		$user = \ListApp\User::where('username','luigi1015')->first();
 
 		foreach( $listTitles as $listTitle )
 		{
@@ -22,6 +23,7 @@ class WeblistsTableSeeder extends Seeder
 			$list->title = $listTitle;
 			$list->nameid = str_replace(" ", "-", $listTitle);
 			$list->public = false;
+			$list->owneruserid = $user->userid;
 			$list->save();
 		}
 	}
