@@ -315,6 +315,15 @@ class ListAppController extends Controller
 
 		$listId = $request->input( 'listId' );
 
+		$list = \ListApp\Weblist::where( 'weblistid', $listId )->first();
+
+		//Before the items are set as selected, set all of them as unselected (so if one isn't selected on the screen, it won't be in the database).
+		foreach( $list->listitems as $listitem )
+		{
+			$listitem->checked = false;
+			$listitem->save();
+		}
+
 		$input = $request->all();
 
 		\Log::info( $input );
