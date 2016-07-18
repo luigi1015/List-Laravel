@@ -311,6 +311,70 @@ class ListAppController extends Controller
 			'listNameId' => 'required',
 		]);
 
+		//TODO: Put in a check so that it won't update anything if the logged in user has no edit rights to the list.
+
+		$listId = $request->input( 'listId' );
+
+		$input = $request->all();
+
+		\Log::info( $input );
+
+		//Go throgh all the inputs
+		foreach( $input as $key => $value )
+		{
+			//Look for deletes
+			if( starts_with($key, 'checkbox-delete-') )
+			{
+				$idToDelete = substr($key, 16);
+				\Log::info( 'Got request to delete item with ID: ' . $idToDelete );
+				$itemToDelete = \ListApp\Listitem::where( 'listitemid', $idToDelete )->first();
+				if( isset($itemToDelete) )
+				{
+					\Log::info( 'The description is ' . $itemToDelete->description );
+					$itemToDelete->delete();
+				}
+				else
+				{
+					\Log::error( 'Could not find list item with ID ' . $idToDelete );
+				}
+			}
+
+			//Look for selects
+			if( starts_with($key, 'checkbox-selected-') )
+			{
+				$idToSelect = substr($key, 18);
+				\Log::info( 'Got request to select item with ID: ' . $idToSelect );
+				$itemToSelect = \ListApp\Listitem::where( 'listitemid', $idToSelect )->first();
+				if( isset($itemToSelect) )
+				{
+					\Log::info( 'The description is ' . $itemToSelect->description );
+					$itemToSelect->checked = true;
+					$itemToSelect->save();
+				}
+				else
+				{
+					\Log::error( 'Could not find list item with ID ' . $idToSelect );
+				}
+			}
+		}
+
+		//Make the list public or not
+		if( $request->has('public') )
+		{
+			\Log::info( 'The list should be public.' );
+			$list = \ListApp\Weblist::where( 'weblistid', $listId )->first();
+			if( isset($list) )
+			{
+				\Log::info( 'The name is ' . $list->nameid );
+				$list->public = true;
+				$list->save();
+			}
+			else
+			{
+				\Log::error( 'Could not find list item with ID ' . $idToSelect );
+			}
+		}
+
 		Session::flash( 'message', 'Got a request to update listid: ' . Input::get('listId') . ' listnameid: ' . Input::get('listNameId') );
 		return \Redirect::route( 'list', array('username' => Input::get('username'), 'id' => Input::get('listNameId')) )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 	}
