@@ -374,6 +374,21 @@ class ListAppController extends Controller
 				\Log::error( 'Could not find list item with ID ' . $idToSelect );
 			}
 		}
+		else
+		{
+			\Log::info( 'The list should not be public.' );
+			$list = \ListApp\Weblist::where( 'weblistid', $listId )->first();
+			if( isset($list) )
+			{
+				\Log::info( 'The name is ' . $list->nameid );
+				$list->public = false;
+				$list->save();
+			}
+			else
+			{
+				\Log::error( 'Could not find list item with ID ' . $idToSelect );
+			}
+		}
 
 		Session::flash( 'message', 'Got a request to update listid: ' . Input::get('listId') . ' listnameid: ' . Input::get('listNameId') );
 		return \Redirect::route( 'list', array('username' => Input::get('username'), 'id' => Input::get('listNameId')) )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
