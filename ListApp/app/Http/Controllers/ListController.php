@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use ListApp\Http\Requests;
 
+use Crypt;
+
 class ListController extends Controller
 {
 	/**
@@ -47,6 +49,8 @@ class ListController extends Controller
 	public static function addItemToWeblist( $weblistId, $itemDescription )
 	{
 		$uuid = ListAppController::getUUID( 'listitems', 'listitemid' );
+
+		\Log::info( 'Encrpyed description: ' . Crypt::encrypt($itemDescription) );
 
 		$uuidString = vsprintf( '%08s-%04s-%04s-%02s%02s-%012s', $uuid->getFieldsHex() );
 		//\Log::info( 'UUID: ' . $uuidString );
