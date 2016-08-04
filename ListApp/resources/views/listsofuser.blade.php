@@ -5,12 +5,17 @@
 @stop
 
 @section('content')
-		Lists of {{ $username or 'Unknown' }}:
+		<h1 class="pageTitle">Lists of {{ $username or 'Unknown' }}</h1>
 		<br>
 		@if( isset($lists) && !empty($lists) )
+			<table>
 			@foreach( $lists as $list )
-				<a href='/user/{{ $username or "unknown" }}/list/{{ $list->nameid }}'>{{ $list->title  or 'Unknown'}}</a>
-				<br>
+				<tr>
+					<td class="tableList">
+						<a href='/user/{{ $username or "unknown" }}/list/{{ $list->nameid }}'>{{ $list->title  or 'Unknown'}}</a>
+					</td>
+				</tr>
 			@endforeach
+			</table>
 		@endif
 @stop

@@ -182,6 +182,14 @@ class ListAppController extends Controller
 	}
 
 	/**
+	 * Responds to GET /user/{username}
+	 */
+	public function getUserPage($username)
+	{
+		return redirect()->route('userlist', [$username]);
+	}
+
+	/**
 	 * Responds to POST /additem
 	 */
 	public function postAddItem()

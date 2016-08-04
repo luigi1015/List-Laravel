@@ -15,7 +15,8 @@ Route::group(['middleware' => 'throttle:30'], function ()
 {
 	Route::get('/', 'ListAppController@getRoot')->name('root');
 	Route::get('/user/{username}/lists', 'ListAppController@getListsOfUser')->name('userlist');
-	Route::get('/user/{username}/list/{id}', 'ListAppController@getUsersList')->name('list');//Maybe should go into the not-authenticated bucket above?
+	Route::get('/user/{username}/list/{id}', 'ListAppController@getUsersList')->name('list');
+	Route::get('/user/{username}', 'ListAppController@getUserPage')->name('userpage');
 });
 
 Route::group(['middleware' => ['auth', 'throttle:30']], function ()

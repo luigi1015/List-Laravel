@@ -24,19 +24,19 @@
 			<br>
 			<table ng-app="">
 				<tr>
-					<th>Select</th>
+					<th class="selectBox">Select</th>
 					<th>Item</th>
-					<th>Delete</th>
+					<th class="deleteBox">Delete</th>
 				</tr>
 			@foreach( $list->listitems as $key=>$listItem )
 				<tr ng-class="{selectedRow: checkbox{{$key}}}" @if( $listItem->checked == true ) class='selectedRow' @endif>
-					<td>
+					<td class="selectBox">
 						<input type="checkbox" id="checkbox-selected-{{ $listItem->listitemid }}" name="checkbox-selected-{{ $listItem->listitemid }}" value="checkbox-{{ $listItem->listitemid }}" ng-model="checkbox{{$key}}" ng-init="checkbox{{$key}}={{$listItem->checked ? 'true' : 'false'}}" @if( $listItem->checked == true) checked @endif>
 					</td>
 					<td>
 						<label for="checkbox-selected-{{ $listItem->listitemid }}">{{ $listItem->description }}</label>
 					</td>
-					<td>
+					<td class="deleteBox">
 						<input type="checkbox" id="checkbox-delete-{{ $listItem->listitemid }}" name="checkbox-delete-{{ $listItem->listitemid }}" value="checkbox-{{ $listItem->listitemid }}">
 					</td>
 				</tr>

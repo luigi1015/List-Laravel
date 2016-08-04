@@ -167,6 +167,7 @@ class ListController extends Controller
 	 */
 	public static function getWeblistsOfUser( $username )
 	{
+/*
 		$user = \ListApp\User::where('username', $username)->first();
 		$weblistIds = \DB::table('permission_user_weblists')->join('permissions', 'permission_user_weblists.permissionid', '=', 'permissions.permissionid')->where('permissions.title', 'Owner')->where('usersid', $user->userid)->pluck('weblistid');
 
@@ -181,5 +182,16 @@ class ListController extends Controller
 			}
 		}
 		return $weblists;
+*/
+		$userid = \ListApp\User::where('username', $username)->pluck('userid')[0];
+		if( \Auth::check() and \Auth::user()->userid == $userid)
+		{
+			//If a user is logged in and is the requested list owner, give all the weblists.
+			return \ListApp\Weblist::where('owneruserid', $userid)->orderBy('title', 'asc')->get();
+		}
+		else
+		{
+			return \ListApp\Weblist::where(['owneruserid' => $userid, 'public' => true])->orderBy('title', 'asc')->get();
+		}
 	}
 }
