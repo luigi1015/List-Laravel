@@ -193,37 +193,49 @@ class ListAppController extends Controller
 	 */
 	public function postAddItem()
 	{
-		//TODO: Probably want to put in a Laravel Validator here like in postAddWeblist(Request $request)
+		$this->validate($request, [
+			'listId' => 'required',
+			'itemDescription' => 'required',
+		]);
 
-		if( Input::has('listId') && Input::has('itemDescription') )
+		if( ListController::canUpdateWeblist($listId) )
 		{
-			$listId = Input::get('listId');
-			ListController::addItemToWeblist( $listId, Input::get('itemDescription') );
-			$ownerid = ListController::getWeblistOwner($listId);
-			if( !is_null($ownerid) )
+			if( Input::has('listId') && Input::has('itemDescription') )
 			{
-				\Log::error( 'In postAddItem(), weblist ' . $listId );
-				$owner = \ListApp\User::where('userid', $ownerid)->first();
+				$listId = Input::get('listId');
+				ListController::addItemToWeblist( $listId, Input::get('itemDescription') );
+				$ownerid = ListController::getWeblistOwner($listId);
+				if( !is_null($ownerid) )
+				{
+					\Log::error( 'In postAddItem(), weblist ' . $listId );
+					$owner = \ListApp\User::where('userid', $ownerid)->first();
 
-				return redirect()->route( 'list', [$owner->username, \ListApp\Weblist::where('weblistid', $listId)->first()->nameid] )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+					return redirect()->route( 'list', [$owner->username, \ListApp\Weblist::where('weblistid', $listId)->first()->nameid] )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+				}
+				else
+				{
+					Session::flash( 'error', 'There was a problem adding the item.' );
+					\Log::error( 'In postAddItem(), There was a problem adding the item, can not find the weblist owner for weblist ' . $listId );
+					return view('welcome')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+				}
+
+				/*
+				\Log::info( 'postAddItem(): userid: ' . \Auth::user()->userid );
+				\Log::info( 'postAddItem(): listId: ' . Input::get('listId') );
+				\Log::info( 'postAddItem(): itemDescription: ' . Input::get('itemDescription') );
+				*/
 			}
 			else
 			{
 				Session::flash( 'error', 'There was a problem adding the item.' );
-				\Log::error( 'In postAddItem(), There was a problem adding the item, can not find the weblist owner for weblist ' . $listId );
+				\Log::error( 'In postAddItem(), Did not get the required info, listId and itemDescription (maybe more if Ive forgotten to update this message.' );
 				return view('welcome')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 			}
-
-			/*
-			\Log::info( 'postAddItem(): userid: ' . \Auth::user()->userid );
-			\Log::info( 'postAddItem(): listId: ' . Input::get('listId') );
-			\Log::info( 'postAddItem(): itemDescription: ' . Input::get('itemDescription') );
-			*/
 		}
 		else
 		{
-			Session::flash( 'error', 'There was a problem adding the item.' );
-			\Log::error( 'In postAddItem(), Did not get the required info, listId and itemDescription (maybe more if Ive forgotten to update this message.' );
+			Session::flash( 'error', 'You do not have permission to add an item to the list.' );
+			\Log::error( 'In postAddItem(), User does not have permission. User: ' . Auth::user()->userid . ' list: ' . Input::get('listId') );
 			return view('welcome')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 		}
 	}
@@ -317,97 +329,102 @@ class ListAppController extends Controller
 			'listId' => 'required',
 			'listNameId' => 'required',
 		]);
-
-		//TODO: Put in a check so that it won't update anything if the logged in user has no edit rights to the list.
-
 		$listId = $request->input( 'listId' );
 
 		$list = \ListApp\Weblist::where( 'weblistid', $listId )->first();
 
-		//Before the items are set as selected, set all of them as unselected (so if one isn't selected on the screen, it won't be in the database).
-		foreach( $list->listitems as $listitem )
+		if( ListController::canUpdateWeblist($listId) )
 		{
-			$listitem->checked = false;
-			$listitem->save();
-		}
-
-		$input = $request->all();
-
-		\Log::info( $input );
-
-		//Go throgh all the inputs
-		foreach( $input as $key => $value )
-		{
-			//Look for deletes
-			if( starts_with($key, 'checkbox-delete-') )
+			//Before the items are set as selected, set all of them as unselected (so if one isn't selected on the screen, it won't be in the database).
+			foreach( $list->listitems as $listitem )
 			{
-				$idToDelete = substr($key, 16);
-				\Log::info( 'Got request to delete item with ID: ' . $idToDelete );
-				$itemToDelete = \ListApp\Listitem::where( 'listitemid', $idToDelete )->first();
-				if( isset($itemToDelete) )
+				$listitem->checked = false;
+				$listitem->save();
+			}
+
+			$input = $request->all();
+
+			\Log::info( $input );
+
+			//Go throgh all the inputs
+			foreach( $input as $key => $value )
+			{
+				//Look for deletes
+				if( starts_with($key, 'checkbox-delete-') )
 				{
-					\Log::info( 'The description is ' . $itemToDelete->description );
-					$itemToDelete->delete();
+					$idToDelete = substr($key, 16);
+					\Log::info( 'Got request to delete item with ID: ' . $idToDelete );
+					$itemToDelete = \ListApp\Listitem::where( 'listitemid', $idToDelete )->first();
+					if( isset($itemToDelete) )
+					{
+						\Log::info( 'The description is ' . $itemToDelete->description );
+						$itemToDelete->delete();
+					}
+					else
+					{
+						\Log::error( 'Could not find list item with ID ' . $idToDelete );
+					}
 				}
-				else
+
+				//Look for selects
+				if( starts_with($key, 'checkbox-selected-') )
 				{
-					\Log::error( 'Could not find list item with ID ' . $idToDelete );
+					$idToSelect = substr($key, 18);
+					\Log::info( 'Got request to select item with ID: ' . $idToSelect );
+					$itemToSelect = \ListApp\Listitem::where( 'listitemid', $idToSelect )->first();
+					if( isset($itemToSelect) )
+					{
+						\Log::info( 'The description is ' . $itemToSelect->description );
+						$itemToSelect->checked = true;
+						$itemToSelect->save();
+					}
+					else
+					{
+						\Log::error( 'Could not find list item with ID ' . $idToSelect );
+					}
 				}
 			}
 
-			//Look for selects
-			if( starts_with($key, 'checkbox-selected-') )
+			//Make the list public or not
+			if( $request->has('public') )
 			{
-				$idToSelect = substr($key, 18);
-				\Log::info( 'Got request to select item with ID: ' . $idToSelect );
-				$itemToSelect = \ListApp\Listitem::where( 'listitemid', $idToSelect )->first();
-				if( isset($itemToSelect) )
+				\Log::info( 'The list should be public.' );
+				$list = \ListApp\Weblist::where( 'weblistid', $listId )->first();
+				if( isset($list) )
 				{
-					\Log::info( 'The description is ' . $itemToSelect->description );
-					$itemToSelect->checked = true;
-					$itemToSelect->save();
+					\Log::info( 'The name is ' . $list->nameid );
+					$list->public = true;
+					$list->save();
 				}
 				else
 				{
 					\Log::error( 'Could not find list item with ID ' . $idToSelect );
 				}
 			}
-		}
-
-		//Make the list public or not
-		if( $request->has('public') )
-		{
-			\Log::info( 'The list should be public.' );
-			$list = \ListApp\Weblist::where( 'weblistid', $listId )->first();
-			if( isset($list) )
-			{
-				\Log::info( 'The name is ' . $list->nameid );
-				$list->public = true;
-				$list->save();
-			}
 			else
 			{
-				\Log::error( 'Could not find list item with ID ' . $idToSelect );
+				\Log::info( 'The list should not be public.' );
+				$list = \ListApp\Weblist::where( 'weblistid', $listId )->first();
+				if( isset($list) )
+				{
+					\Log::info( 'The name is ' . $list->nameid );
+					$list->public = false;
+					$list->save();
+				}
+				else
+				{
+					\Log::error( 'Could not find list item with ID ' . $idToSelect );
+				}
 			}
+
+			Session::flash( 'message', 'Got a request to update listid: ' . Input::get('listId') . ' listnameid: ' . Input::get('listNameId') );
+			return \Redirect::route( 'list', array('username' => Input::get('username'), 'id' => Input::get('listNameId')) )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 		}
 		else
 		{
-			\Log::info( 'The list should not be public.' );
-			$list = \ListApp\Weblist::where( 'weblistid', $listId )->first();
-			if( isset($list) )
-			{
-				\Log::info( 'The name is ' . $list->nameid );
-				$list->public = false;
-				$list->save();
-			}
-			else
-			{
-				\Log::error( 'Could not find list item with ID ' . $idToSelect );
-			}
+			Session::flash( 'error', 'You do not have permission to update listid: ' . Input::get('listId') . ' listnameid: ' . Input::get('listNameId') );
+			return \Redirect::route( 'list', array('username' => Input::get('username'), 'id' => Input::get('listNameId')) )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 		}
-
-		Session::flash( 'message', 'Got a request to update listid: ' . Input::get('listId') . ' listnameid: ' . Input::get('listNameId') );
-		return \Redirect::route( 'list', array('username' => Input::get('username'), 'id' => Input::get('listNameId')) )->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 	}
 
 	/**

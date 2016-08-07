@@ -146,6 +146,23 @@ class ListController extends Controller
 	}
 
 	/**
+	 * Returns wether the current logged in user can update a Weblist of the given id.
+	 */
+	public static function canUpdateWeblist( $weblistId )
+	{
+		if( \Auth::check() )
+		{//If someone is logged in.
+			$list = \ListApp\Weblist::where( 'weblistid', $weblistId )->first();
+
+			return \Auth::user()->userid == $list->owneruserid;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
 	 * Returns the owner user id of the Weblist of the given id.
 	 */
 	public static function getWeblistOwner( $weblistId )

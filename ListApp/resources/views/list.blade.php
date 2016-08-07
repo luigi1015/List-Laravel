@@ -12,7 +12,7 @@
 	@if( isset($list) )
 		List title: {{ $list->title }}
 		<br>
-		@if( Auth::check() and Auth::user()->username == $username)
+		 @if( Auth::check() and Auth::user()->username == $username)
 		<form method="post" action="/updateweblist">
 			<input type="hidden" name="listId" value="{{ $list->weblistid }}">
 			<input type="hidden" name="listNameId" value="{{ $list->nameid }}">
