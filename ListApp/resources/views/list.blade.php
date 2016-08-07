@@ -12,6 +12,7 @@
 	@if( isset($list) )
 		List title: {{ $list->title }}
 		<br>
+		@if( Auth::check() and Auth::user()->username == $username)
 		<form method="post" action="/updateweblist">
 			<input type="hidden" name="listId" value="{{ $list->weblistid }}">
 			<input type="hidden" name="listNameId" value="{{ $list->nameid }}">
@@ -20,6 +21,7 @@
 			<input type="checkbox" id="public" name="public" value="public"@if($list->public == true) checked @endif>
 			<label for="public">Public</label>
 			<br>
+		@endif
 			List items:
 			<br>
 			<table ng-app="">
@@ -42,6 +44,7 @@
 				</tr>
 			@endforeach
 			</table>
+		@if( Auth::check() and Auth::user()->username == $username)
 			<br>
 			<input type="submit" value="Update">
 		</form>
@@ -57,6 +60,7 @@
 				<input type="submit">
 			</form>
 		</fieldset>
+		@endif
 	@else
 		Could not find the list.
 	@endif

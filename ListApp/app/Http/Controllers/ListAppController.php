@@ -177,7 +177,6 @@ class ListAppController extends Controller
 		$selectedWeblist = ListController::getWeblistByUseridAndNameid( $user->userid, $id );
 		//\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
 		//\Log::info( 'Got request for user ' . $username . ' and list ' . $id . '.' );
-		//return view('list');
 		return view('list')->with('list', $selectedWeblist)->with('username', $username)->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 	}
 
