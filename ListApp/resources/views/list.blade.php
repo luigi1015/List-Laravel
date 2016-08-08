@@ -10,7 +10,7 @@
 
 @section('content')
 	@if( isset($list) )
-		List title: {{ $list->title }}
+		<center><h1>{{ $list->title }}</h1></center>
 		<br>
 		 @if( Auth::check() and Auth::user()->username == $username)
 		<form method="post" action="/updateweblist">
