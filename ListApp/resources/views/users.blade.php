@@ -8,7 +8,7 @@
 		Users:
 		<br>
 		@foreach( $users as $user )
-			{{ $user->userid }} - {{ $user->username }} - {{ $user->name }}
+			<a href='/settings/user/{{ $user->username }}'>{{ $user->userid }} - {{ $user->username }} - {{ $user->name }}</a>
 			<br>
 		@endforeach
 @stop

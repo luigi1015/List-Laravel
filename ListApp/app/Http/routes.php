@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth', 'throttle:30']], function ()
 	Route::post('/updateweblist', 'ListAppController@postUpdateWeblist');
 	Route::get('/settings', 'ListAppController@getSettings')->name('settings');
 	Route::get('/settings/users', 'ListAppController@getUsers');
+	Route::get('/settings/user/{username}', 'ListAppController@getUser');
 });
 
 

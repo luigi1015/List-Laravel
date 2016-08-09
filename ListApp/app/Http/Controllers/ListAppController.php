@@ -137,6 +137,23 @@ class ListAppController extends Controller
 	}
 
 	/**
+	 * Responds to GET /settings/user/{username}
+	 */
+	public function getUser($username)
+	{
+		if( ListAppSettingsController::isCurrentUserAdmin() == true || ListAppSettingsController::isCurrentUserRoot() == true )
+		{
+			$user = ListAppSettingsController::getUser($username);
+			return view('user')->with('user', $user)->with('activePage', 'settings')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+		}
+		else
+		{
+			Session::flash( 'error', 'You do not have access to that page.' );
+			return redirect('/')->with('activePage', 'root')->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+		}
+	}
+
+	/**
 	 * Responds to GET /
 	 */
 	public function getRoot()

@@ -24,6 +24,21 @@ class ListAppSettingsController extends Controller
 	}
 
 	/**
+	 * Returns info about a user if the current logged in user has the right permissions.
+	 */
+	public static function getUser( $username )
+	{
+		if( ListAppSettingsController::isCurrentUserAdmin() || ListAppSettingsController::isCurrentUserRoot() )
+		{
+			return \ListApp\User::where( 'username', $username )->first();
+		}
+		else
+		{
+			return [];
+		}
+	}
+
+	/**
 	 * Returns true if the current user is an admin.
 	 */
 	public static function isCurrentUserAdmin()
