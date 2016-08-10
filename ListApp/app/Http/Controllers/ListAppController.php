@@ -208,18 +208,18 @@ class ListAppController extends Controller
 	/**
 	 * Responds to POST /additem
 	 */
-	public function postAddItem()
+	public function postAddItem(Request $request)
 	{
 		$this->validate($request, [
 			'listId' => 'required',
 			'itemDescription' => 'required',
 		]);
 
-		if( ListController::canUpdateWeblist($listId) )
+		if( Input::has('listId') && Input::has('itemDescription') )
 		{
-			if( Input::has('listId') && Input::has('itemDescription') )
+			$listId = Input::get('listId');
+			if( ListController::canUpdateWeblist($listId) )
 			{
-				$listId = Input::get('listId');
 				ListController::addItemToWeblist( $listId, Input::get('itemDescription') );
 				$ownerid = ListController::getWeblistOwner($listId);
 				if( !is_null($ownerid) )
