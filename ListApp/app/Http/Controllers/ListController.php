@@ -112,6 +112,7 @@ class ListController extends Controller
 		$newWeblist->weblistid = $uuid;
 		$newWeblist->title = $newWeblistTitle;
 		$newWeblist->nameid = $newWeblistNameid;
+		$newWeblist->owneruserid = $userid;
 		$newWeblist->save();
 
 		\DB::insert('INSERT INTO permission_user_weblists (permissionid, usersid, weblistid) VALUES (?, ?, ?)', [$permission->permissionid, $userid, $newWeblist->weblistid]);
