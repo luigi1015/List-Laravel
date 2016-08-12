@@ -67,20 +67,20 @@ main
 	font-size: large;
 }
 
-table
+.menuTable
 {
 	border: 1px solid black;
 	border-collapse: collapse;
 	width: 100%;
 }
 
-td, th
+.menuTable td, .menuTable th
 {
 	border: 1px solid black;
 	padding: 0.5em;
 }
 
-td
+.menuTable td
 {
 	text-align: center;
 	font-weight: bold;
@@ -88,12 +88,12 @@ td
 	color: #000000;
 }
 
-td a
+.menuTable td a
 {
 	color: #000000;
 }
 
-td label, td a
+.menuTable td label, .menuTable td a
 {
 	display: inline-block;
 	width: 100%;
@@ -102,25 +102,30 @@ td label, td a
 	padding-bottom: 1em;
 }
 
-th
+.menuTable th
 {
 	color: #FFFFFF;
 	background-color: #606060;
 }
 
-tr:nth-child(even)
+.menuTable tr:nth-child(even)
 {
 	background-color: #E8E8E8;
 }
 
-tr:hover
+.menuTable tr:hover
 {
 	background-color: #87CEFA;
 }
 
-tr.selectedRow
+.menuTable tr.selectedRow
 {
 	background-color: #A0A0A0;
+}
+
+.ghostTable
+{
+	border-collapse: collapse;
 }
 
 .selectBox, .deleteBox

@@ -12,7 +12,17 @@
 	@if( isset($list) )
 		<center><h1>{{ $list->title }}</h1></center>
 		<br>
-		 @if( Auth::check() and Auth::user()->username == $username)
+		@if( Auth::check() and Auth::user()->username == $username)
+		<table class="ghostTable">
+			<tr>
+				<td>
+					This is a test.
+					@foreach( $lists as $weblist )
+						<a href='/user/{{ Auth::user()->username }}/list/{{ $weblist->nameid }}'>{{ $weblist->title }}</a>
+						<br>
+					@endforeach
+				</td>
+				<td>
 		<form method="post" action="/updateweblist">
 			<input type="hidden" name="listId" value="{{ $list->weblistid }}">
 			<input type="hidden" name="listNameId" value="{{ $list->nameid }}">
@@ -24,7 +34,7 @@
 		@endif
 			List items:
 			<br>
-			<table ng-app="">
+			<table ng-app="" class="menuTable">
 				<tr>
 					<th class="selectBox">Select</th>
 					<th>Item</th>
@@ -60,6 +70,9 @@
 				<input type="submit">
 			</form>
 		</fieldset>
+				</td>
+			</tr>
+		</table>
 		@endif
 	@else
 		Could not find the list.
