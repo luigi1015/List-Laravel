@@ -16,11 +16,20 @@
 		<table class="ghostTable">
 			<tr>
 				<td>
-					This is a test.
-					@foreach( $lists as $weblist )
-						<a href='/user/{{ Auth::user()->username }}/list/{{ $weblist->nameid }}'>{{ $weblist->title }}</a>
-						<br>
-					@endforeach
+					@if( isset($listowner) )
+						<table class="menuTable">
+							<tr>
+								<th><h3>Your Lists</h3></th>
+							</tr>
+							@foreach( $lists as $weblist )
+							<tr>
+								<td>
+									<a href='/user/{{ $listowner->username }}/list/{{ $weblist->nameid }}'>{{ $weblist->title }}</a>
+								</td>
+							</tr>
+							@endforeach
+						</table>
+					@endif
 				</td>
 				<td>
 		<form method="post" action="/updateweblist">
@@ -28,12 +37,7 @@
 			<input type="hidden" name="listNameId" value="{{ $list->nameid }}">
 			<input type="hidden" name="username" value="{{ $username }}">
 			{!! csrf_field() !!}
-			<input type="checkbox" id="public" name="public" value="public"@if($list->public == true) checked @endif>
-			<label for="public">Public</label>
-			<br>
 		@endif
-			List items:
-			<br>
 			<table ng-app="" class="menuTable">
 				<tr>
 					<th class="selectBox">Select</th>
@@ -55,6 +59,9 @@
 			@endforeach
 			</table>
 		@if( Auth::check() and Auth::user()->username == $username)
+			<br>
+			<label for="public">Public</label>
+			<input type="checkbox" id="public" name="public" value="public"@if($list->public == true) checked @endif>
 			<br>
 			<input type="submit" value="Update">
 		</form>

@@ -5,19 +5,26 @@
 @stop
 
 @section('content')
-		Welcome, {{ Auth::user()->name }}!
+		<center><h1>Welcome, {{ Auth::user()->name }}!</h1></center>
 		<br>
 {{--
 		Your user id is {{ Auth::user()->userid }}
 		<br>
 --}}
-		Your Lists:
 		<br>
+		<table class="menuTable">
+			<tr>
+				<th><h3>Your Lists</h3></th>
+			</tr>
 		@foreach( $lists as $list )
-			<a href='/user/{{ Auth::user()->username }}/list/{{ $list->nameid }}'>{{ $list->title }}</a>
-			<br>
+			<tr>
+				<td>
+					<a href='/user/{{ Auth::user()->username }}/list/{{ $list->nameid }}'>{{ $list->title }}</a>
+				</td>
+			</tr>
 		@endforeach
-
+		</table>
+		<br>
 		<fieldset>
 			<legend>Add List</legend>
 			<form method="post" action="/addweblist">

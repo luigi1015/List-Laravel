@@ -44,6 +44,22 @@ class ListController extends Controller
 	}
 
 	/**
+	 * Returns a Weblist of the given id.
+	 * Throws an exception if the user doesn't have read access to that weblist.
+	 */
+	public static function getWeblistOwnerByWeblistid( $weblistId )
+	{
+		if( ListController::canReadWeblist($weblistId) )
+		{
+			return \ListApp\Weblist::where('weblistid', $weblistId)->first();
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+
+	/**
 	 * Adds an item to a weblist.
 	 */
 	public static function addItemToWeblist( $weblistId, $itemDescription )
@@ -123,21 +139,29 @@ class ListController extends Controller
 	 */
 	public static function canReadWeblist( $weblistId )
 	{
-		if( \ListApp\Weblist::where('weblistid', $weblistId)->first()->public == true )
+		$weblist = \ListApp\Weblist::where('weblistid', $weblistId)->first();
+		if( $weblist->public == true )
 		{
 			return true;
 		}
 		else if( \Auth::check() )
 		{//If someone is logged in.
-			$info = \DB::table('weblists')->join('permission_user_weblists','weblists.weblistid','=','permission_user_weblists.weblistid')->join('permissions','permissions.permissionid','=','permission_user_weblists.permissionid')->where('weblists.weblistid',$weblistId)->where('permission_user_weblists.usersid',\Auth::user()->userid)->first();
-
-			if( is_null($info) )
+			if( $weblist->owneruserid == \Auth::user()->userid )
 			{
-				return false;
+				return true;
 			}
 			else
 			{
-				return $info->canRead == true;
+				$info = \DB::table('weblists')->join('permission_user_weblists','weblists.weblistid','=','permission_user_weblists.weblistid')->join('permissions','permissions.permissionid','=','permission_user_weblists.permissionid')->where('weblists.weblistid',$weblistId)->where('permission_user_weblists.usersid',\Auth::user()->userid)->first();
+
+				if( is_null($info) )
+				{
+					return false;
+				}
+				else
+				{
+					return $info->canRead == true;
+				}
 			}
 		}
 		else

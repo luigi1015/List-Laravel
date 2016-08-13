@@ -126,6 +126,13 @@ main
 .ghostTable
 {
 	border-collapse: collapse;
+	width: 100%;
+}
+
+.ghostTable td
+{
+	padding-left: 1em;
+	padding-right: 1em;
 }
 
 .selectBox, .deleteBox
