@@ -51,10 +51,12 @@ class ListController extends Controller
 	{
 		if( ListController::canReadWeblist($weblistId) )
 		{
-			return \ListApp\Weblist::where('weblistid', $weblistId)->first();
+			$userid = \ListApp\Weblist::where('weblistid', $weblistId)->first()->owneruserid;
+			return \ListApp\User::where('userid', $userid)->first();
 		}
 		else
 		{
+			//\Log::info( "User can't read weblist " . $weblistId );
 			return NULL;
 		}
 	}
