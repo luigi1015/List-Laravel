@@ -447,6 +447,23 @@ class ListAppController extends Controller
 	}
 
 	/**
+	 * Responds to GET /api/user/{username}/list/{id}
+	 */
+	public function getAPIUsersList($username, $id)
+	{
+		//TODO: Probably want to add some sort of check to make sure $id is a valid id. That way the app can handle the error properly.
+/*
+		$user = \ListApp\User::where('username', $username)->first();
+		$selectedWeblist = ListController::getWeblistByUseridAndNameid( $user->userid, $id );
+		$weblistOwner = ListController::getWeblistOwnerByWeblistid( $selectedWeblist->weblistid );
+		\Log::info( 'weblistOwner: ' . $weblistOwner->username . '.' );
+		//\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
+		//\Log::info( 'Got request for user ' . $username . ' and list ' . $id . '.' );
+		return view('list')->with('lists', ListController::getUsersWeblists())->with('list', $selectedWeblist)->with('listowner', $weblistOwner)->with('username', $username)->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
+*/
+	}
+
+	/**
 	 * Pushes a message onto the Session flash message as part of an array.
 	 */
 	public function addFlashMessage( $flashMessage )

@@ -17,6 +17,7 @@ Route::group(['middleware' => 'throttle:30'], function ()
 	Route::get('/user/{username}/lists', 'ListAppController@getListsOfUser')->name('userlist');
 	Route::get('/user/{username}/list/{id}', 'ListAppController@getUsersList')->name('list');
 	Route::get('/user/{username}', 'ListAppController@getUserPage')->name('userpage');
+	Route::get('/api/user/{username}/list/{id}', 'ListAppController@getAPIUsersList')->name('userpage');
 });
 
 Route::group(['middleware' => ['auth', 'throttle:30']], function ()
