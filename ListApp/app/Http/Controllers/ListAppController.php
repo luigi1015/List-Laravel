@@ -447,7 +447,7 @@ class ListAppController extends Controller
 	}
 
 	/**
-	 * Responds to GET /api/user/{username}/list/{id}
+	 * Responds to GET /api/v1/user/{username}/list/{id}
 	 */
 	public function getAPIUsersList($username, $id)
 	{
@@ -461,6 +461,14 @@ class ListAppController extends Controller
 		//\Log::info( 'Got request for user ' . $username . ' and list ' . $id . '.' );
 		return view('list')->with('lists', ListController::getUsersWeblists())->with('list', $selectedWeblist)->with('listowner', $weblistOwner)->with('username', $username)->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 */
+	}
+
+	/**
+	 * Responds to GET /api/v1/user/{username}
+	 */
+	public function getAPIUserInfo( $username )
+	{
+		//TODO: Probably want to add some sort of check to make sure $username is a valid username. That way the app can handle the error properly.
 	}
 
 	/**

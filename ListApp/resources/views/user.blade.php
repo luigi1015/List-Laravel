@@ -7,6 +7,8 @@
 @section('content')
 	@if( isset($user) )
 		{{ $user->userid }} - {{ $user->username }} - {{ $user->name }}
+		<br>
+		API Key: placeholder here
 	@else
 		That user was not found.
 	@endif
