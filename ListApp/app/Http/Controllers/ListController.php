@@ -45,6 +45,24 @@ class ListController extends Controller
 
 	/**
 	 * Returns a Weblist of the given id.
+	 * Checks the API key, throws an exception if the user doesn't have read access to that weblist.
+	 */
+	public static function getAPIOnlyWeblistByUseridAndNameid( $userid, $weblistNameid, $APIKey )
+	{
+		//TODO: Should put in a check for the API key.
+
+		$info = \DB::table('weblists')->join('permission_user_weblists','weblists.weblistid','=','permission_user_weblists.weblistid')->join('permissions','permissions.permissionid','=','permission_user_weblists.permissionid')->where('permissions.title','Owner')->where('weblists.nameid',$weblistNameid)->where('permission_user_weblists.usersid',$userid)->pluck('weblists.weblistid');
+
+		//\Log::info($info);
+		if( !empty($info) )
+		{
+			$selectedWeblist = \ListApp\Weblist::with('listitems', 'listitems.tags')->where('weblistid', $info[0])->first();
+			return $selectedWeblist;
+		}
+	}
+
+	/**
+	 * Returns a Weblist of the given id.
 	 * Throws an exception if the user doesn't have read access to that weblist.
 	 */
 	public static function getWeblistOwnerByWeblistid( $weblistId )

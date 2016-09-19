@@ -16,4 +16,13 @@ class Tag extends Model
 	{
 		return $this->belongsToMany('\ListApp\Listitem')->withTimestamps();
 	}
+
+	/**
+	 * The attributes that should be hidden for arrays.
+	 *
+	 * @var array
+	 */
+	protected $hidden = [
+		'tagid', 'pivot', 'created_at', 'updated_at'
+	];
 }

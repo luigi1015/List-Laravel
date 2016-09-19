@@ -26,4 +26,13 @@ class Weblist extends Model
 	{
 		return $this->hasMany('\ListApp\Permissionuserweblist')->withTimestamps();
 	}
+
+	/**
+	 * The attributes that should be hidden for arrays.
+	 *
+	 * @var array
+	 */
+	protected $hidden = [
+		'weblistid', 'owneruserid', 'created_at', 'updated_at'
+	];
 }

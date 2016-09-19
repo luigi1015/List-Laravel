@@ -20,4 +20,13 @@ class Listitem extends Model
 	{
 		return $this->belongsToMany('\ListApp\Tag')->withTimestamps();
 	}
+
+	/**
+	 * The attributes that should be hidden for arrays.
+	 *
+	 * @var array
+	 */
+	protected $hidden = [
+		'listitemid', 'pivot', 'created_at', 'updated_at'
+	];
 }

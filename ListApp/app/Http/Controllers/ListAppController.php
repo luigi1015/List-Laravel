@@ -193,7 +193,7 @@ class ListAppController extends Controller
 		$user = \ListApp\User::where('username', $username)->first();
 		$selectedWeblist = ListController::getWeblistByUseridAndNameid( $user->userid, $id );
 		$weblistOwner = ListController::getWeblistOwnerByWeblistid( $selectedWeblist->weblistid );
-		\Log::info( 'weblistOwner: ' . $weblistOwner->username . '.' );
+		//\Log::info( 'weblistOwner: ' . $weblistOwner->username . '.' );
 		//\Log::info( 'Got ' . $selectedWeblist->listitems()->count() . ' listitems with id of ' . $id . '.' );
 		//\Log::info( 'Got request for user ' . $username . ' and list ' . $id . '.' );
 		return view('list')->with('lists', ListController::getUsersWeblists())->with('list', $selectedWeblist)->with('listowner', $weblistOwner)->with('username', $username)->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
@@ -461,6 +461,12 @@ class ListAppController extends Controller
 		//\Log::info( 'Got request for user ' . $username . ' and list ' . $id . '.' );
 		return view('list')->with('lists', ListController::getUsersWeblists())->with('list', $selectedWeblist)->with('listowner', $weblistOwner)->with('username', $username)->with('isAdmin', ListAppSettingsController::isCurrentUserAdmin())->with('isRoot', ListAppSettingsController::isCurrentUserRoot());
 */
+
+		$user = \ListApp\User::where('username', $username)->first();
+		$selectedWeblist = ListController::getAPIOnlyWeblistByUseridAndNameid( $user->userid, $id, '' );
+		return response()->json( $selectedWeblist );
+		//return response()->json( $selectedWeblist->get(array('title', 'nameid', 'public', 'listitems.description', 'listitems.checked', 'listitems.tags.description')) );
+		//return response()->json( $selectedWeblist->get(array('title', 'nameid', 'public')) );
 	}
 
 	/**
