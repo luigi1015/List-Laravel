@@ -534,9 +534,9 @@ class ListAppController extends Controller
 				\Log::error('There was a problem generating the UUID: ' . $e.getMessage() .'\n' . $e.getTraceAsString());
 				abort(500);
 			}
-			$usersWithSameID = \DB::table($tableName)->where($columnName, $uuid);
+			$recordsWithSameID = \DB::table($tableName)->where($columnName, $uuid);
 		}
-		while( $usersWithSameID->count() > 0 );//If a user with the same id is found, create another one.
+		while( $recordsWithSameID->count() > 0 );//If a record with the same id is found, create another one.
 
 		return $uuid;
 	}
