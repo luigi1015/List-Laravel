@@ -524,6 +524,10 @@ class ListAppController extends Controller
 				\Log::error('There was a problem generating the UUID, been through the UUID generation block ' . $iterations . ' times.' );
 				abort(500);
 			}
+			else
+			{
+				$iterations++;
+			}
 
 			try
 			{
